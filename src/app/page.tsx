@@ -3,6 +3,7 @@ import Footer from './../components/layout/Footer';
 import {HeroSection} from './../components/home/HeroSection';
 import SponsorsSection from './../components/home/SponsorsSection/index';
 import OurPartnersSection from './../components/home/sections/OurPartnersSection';
+import AboutUsSection from './../components/home/sections/AboutUs';
 
 export default function Home() {
    return (
@@ -10,6 +11,7 @@ export default function Home() {
          <HeroSection />
          <SponsorsSection/>
          <OurPartnersSection/>
+         <AboutUsSection/>
          <Footer />
       </div>
    );
