@@ -154,10 +154,7 @@ export default function SponsorsSection() {
                   />
                </div>
                <div
-                  className=' pointer-events-none absolute inset-y-0 -top-1/2 right-0 hidden
-    w-[330px] lg:block opacity-10
-    transform -scale-x-100 origin-center
-  '>
+                  className='pointer-events-none absolute inset-y-0 -top-1/2 right-0 hidden w-[330px] lg:block opacity-10 transform -scale-x-100 origin-center'>
                   <Image
                      src={arrowuiIcon}
                      alt=''
