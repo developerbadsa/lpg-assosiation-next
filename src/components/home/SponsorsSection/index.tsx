@@ -6,10 +6,11 @@ import leaderImg1 from '../../../assets/leader-img/md-serajul-mawla.png';
 import leaderImg2 from '../../../assets/leader-img/hasin-parfez.png';
 import folio1 from '../../../assets/Bento_Grid (7).png';
 import folio2 from '../../../assets/Bento_Grid (8).png';
+import sponserImg1 from './../../../assets/sponser-img/mgi.png';
 
 type Sponsor = {
    name: string;
-   logo: string;
+   logo: StaticImageData | string;
 };
 
 type Leader = {
@@ -21,16 +22,16 @@ type Leader = {
 };
 
 const sponsors: Sponsor[] = [
-   {name: 'MGI', logo: '/sponsors/mgi.png'},
-   {name: 'Laugfs Gas', logo: '/sponsors/laugfs.png'},
-   {name: 'Promita LPG', logo: '/sponsors/promita.png'},
-   {name: 'Total', logo: '/sponsors/total.png'},
-   {name: 'Omera', logo: '/sponsors/omera.png'},
-   {name: 'Navana LPG', logo: '/sponsors/navana.png'},
-   {name: 'JMI Gas', logo: '/sponsors/jmi.png'},
-   {name: 'Beximco LPG', logo: '/sponsors/beximco.png'},
-   {name: 'Petromax LPG', logo: '/sponsors/petromax.png'},
-   {name: 'Universal Gas', logo: '/sponsors/universal.png'},
+   {name: 'MGI', logo: sponserImg1},
+   {name: 'Laugfs Gas', logo: sponserImg1},
+   {name: 'Promita LPG', logo: sponserImg1},
+   {name: 'Total', logo: sponserImg1},
+   {name: 'Omera', logo: sponserImg1},
+   {name: 'Navana LPG', logo: sponserImg1},
+   {name: 'JMI Gas', logo: sponserImg1},
+   {name: 'Beximco LPG', logo: sponserImg1},
+   {name: 'Petromax LPG', logo: sponserImg1},
+   {name: 'Universal Gas', logo: sponserImg1},
 ];
 
 const leaders: Leader[] = [
@@ -72,18 +73,24 @@ export default function SponsorsSection() {
          {/* top green line */}
          <div className='pointer-events-none absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-[#6ACF4F] via-[#C7F0D1] to-[#6ACF4F]' />
 
-         <div className='relative'>
+         <div className='relative flex flex-col gap-24'>
             {/* sponsors title + grid */}
             <div className='flex flex-col items-center text-center relative w-full '>
                {/* side leaves */}
-               <div className='pointer-events-none absolute left-6 top-10 hidden h-[100%] w-[230px] lg:block bg-radial from-[#75B5534F] from-10% to-transparent'>
+               <div className='pointer-events-none absolute inset-y-0 left-0 hidden w-[330px] lg:block'>
+                  {/* green radial glow */}
+                  <div className='absolute inset-0 bg-[radial-gradient(circle_at_center,_#75B5534d,_transparent_70%)]' />
+                  {/* leaf image */}
                   <Image src={folio1} alt='' fill className='object-contain' />
                </div>
-               <div className='pointer-events-none absolute right-6 top-10 hidden h-40 w-10 lg:block'>
+
+               {/* right glow + leaf (optional) */}
+               <div className='pointer-events-none absolute inset-y-0 right-0 hidden w-[330px] lg:block'>
+                  <div className='absolute inset-0 bg-[radial-gradient(circle_at_center,_#75B5534d,_transparent_70%)]' />
                   <Image src={folio2} alt='' fill className='object-contain' />
                </div>
 
-               <div className="lpg-container">
+               <div className='lpg-container'>
                   <h2 className='text-primary text-[20px] font-semibold tracking-[0.22em]'>
                      SPONSORS
                   </h2>
