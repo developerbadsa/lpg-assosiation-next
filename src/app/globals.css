@@ -48,5 +48,27 @@ body {
 }
 
 .secondary-text {
-   color: var(--text-secondary);
+   color: var(--stext-secondary);
+}
+
+
+
+.neon-pill {
+  position: relative;
+  border-radius: 9999px;              /* full pill */
+  border: 2px solid #b7ea87ba;         /* neon green border */
+  background: transparent;
+  /* outer glow */
+  box-shadow:
+    0 0 6px  rgba(155, 255, 59, 0.2),
+    0 0 16px rgba(155, 255, 59, 0.1),
+    0 0 32px rgba(155, 255, 59, 0.01);
+}
+
+/* optional: hover a bit brighter */
+.neon-pill:hover {
+  box-shadow:
+    0 0 10px rgba(155, 255, 59, .2),
+    0 0 24px rgba(155, 255, 59, 0),
+    0 0 40px rgba(155, 255, 59, 0.2);
 }

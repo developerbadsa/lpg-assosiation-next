@@ -6,6 +6,7 @@ import OurPartnersSection from './../components/home/sections/OurPartnersSection
 import AboutUsSection from './../components/home/sections/AboutUs';
 import CentralCommitteeSection from './../components/home/sections/CentralCommitteeSection/index';
 import WhyChooseUsSection from './../components/home/WhyChooseUsSection';
+import JoinWithUsSection from './../components/home/sections/JoinWithUsSection';
 
 export default function Home() {
    return (
@@ -15,6 +16,7 @@ export default function Home() {
          <OurPartnersSection/>
          <AboutUsSection/>
          <WhyChooseUsSection/>
+         <JoinWithUsSection/>
          <CentralCommitteeSection/>
          <Footer/>
       </div>
