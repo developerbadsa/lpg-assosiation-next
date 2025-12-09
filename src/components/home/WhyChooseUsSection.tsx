@@ -56,44 +56,40 @@ export default function WhyChooseUsSection() {
          {/* light background glow */}
          <div className='pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_#E1F4E880,_transparent_70%)]' />
 
-         <div className='lpg-container relative'>
+         <div className='lpg-container relative bg-red-400'>
             <SectionHeading
                title='WHY CHOOSE US'
                subtitle='Lorem ipsum dolor sit amet consectetur. Urna ultrices amet ultrices sagittis leo in. In urna fermentum nunc sapien tortor.'
             />
 
-            <div className='mt-10 flex gap-4 lg:gap-6'>
+            <div className='mt-10 flex gap-4 lg:gap-6   h-[570px]'>
                {/* LEFT: main card + dynamic content */}
                <div
-                  className='
-              relative flex-1
-              h-[320px] min-h-[280px]
-              overflow-hidden rounded-[26px]
+                  className='relative w-[700px]
+              overflow-hidden rounded-[15px]
               shadow-[0_22px_40px_rgba(0,0,0,0.22)]
             '>
-                  {/* <Image
-              src={stationIllustration}
-              alt="Modern LPG station illustration"
-              fill
-              priority
-              className="object-cover"
-            /> */}
+                  <Image
+                     src={stationIllustration}
+                     alt='Modern LPG station illustration'
+                     fill
+                     priority
+                     className='object-cover'
+                  />
 
-                  <div className='pointer-events-none absolute inset-0 bg-gradient-to-t from-[#009F6B]/90 via-[#009F6B]/30 to-transparent' />
-
-                  <div className='absolute inset-x-0 bottom-0 flex justify-between gap-6 px-7 pb-6 pt-5'>
-                     <div className='max-w-[430px] text-white'>
-                        <Image src={stationIllustration} alt={''} />
+                  <div className='absolute inset-x-0 bottom-0 flex justify-between gap-6  pb-6 pt-5 w-full bg-[#22875ad0] px-4'>
+                     <div className='w-full text-white'>
+                        <div className='mb-2   flex w-full rounded-none'></div>
                         <div className='flex items-center gap-2'>
                            <div className='flex h-7 w-7 items-center justify-center rounded-full border border-white/60 bg-white/10 text-[13px] font-semibold'>
                               {activeContent.badge}
                            </div>
-                           <p className='text-[13px] font-semibold uppercase tracking-[0.18em]'>
+                           <p className='text-[22px] font-bold uppercase tracking-[0.18em]'>
                               {activeContent.heading}
                            </p>
                         </div>
 
-                        <p className='mt-3 text-[11px] leading-relaxed text-white/90'>
+                        <p className='mt-3 text-[15px] leading-relaxed text-white/90'>
                            {activeContent.body}
                         </p>
 
@@ -101,7 +97,7 @@ export default function WhyChooseUsSection() {
                            type='button'
                            className='
                     mt-4 inline-flex items-center gap-2
-                    rounded-full border border-white/70 bg-white/10 px-4 py-1.5
+                    rounded-full border border-[#46FF5B66] bg-white/10 px-4 py-1.5
                     text-[11px] font-semibold uppercase tracking-[0.18em]
                     transition-colors hover:bg-white hover:text-[#009F6B]
                   '>
@@ -112,14 +108,14 @@ export default function WhyChooseUsSection() {
                </div>
 
                {/* RIGHT: vertical pills */}
-               <div className='flex h-[320px] min-h-[280px] shrink-0 gap-3'>
+               <div className='flex h-full min-h-[280px] shrink-0 gap-3 flex-1'>
                   {PILL_ITEMS.map(pill => (
                      <div
                         key={pill.id}
                         onMouseEnter={() => setHoveredId(pill.id)}
                         onMouseLeave={() => setHoveredId(null)}
                         className='
-                  relative flex h-full w-[90px] cursor-pointer items-center justify-center
+                  relative flex h-full w-[145px] cursor-pointer items-center justify-center
                   overflow-hidden rounded-[26px]
                   bg-gradient-to-b from-[#00B06D] via-[#00A261] to-[#00894E]
                   shadow-[0_22px_36px_rgba(0,0,0,0.22)]
