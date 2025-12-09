@@ -8,7 +8,7 @@ type SectionHeadingProps = {
   className?: string;
 };
 
-export function SectionHeading({
+export default function SectionHeading({
   title,
   subtitle,
   align = 'center',

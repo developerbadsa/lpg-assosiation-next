@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import aboutImg from './../img/Group 46.png';
-import {SectionHeading} from './../../ui/SectionHeading';
+import SectionHeading from './../../ui/SectionHeading';
 
 type VisionStat = {
    key: string;

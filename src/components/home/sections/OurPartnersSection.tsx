@@ -9,7 +9,7 @@ import mrclLogo from '../../../assets/partner-logos/mrcl.png';
 import orionLogo from '../../../assets/partner-logos/onion.png';
 import soibalLogo from '../../../assets/partner-logos/soiballogo.png';
 
-import { SectionHeading } from '../../ui/SectionHeading';
+import SectionHeading from '../../ui/SectionHeading';
 import { LogoCard, type LogoItem } from '../../ui/LogoCard';
 
 const partners: LogoItem[] = [
