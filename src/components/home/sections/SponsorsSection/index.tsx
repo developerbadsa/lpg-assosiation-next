@@ -8,6 +8,7 @@ import folio1 from '@/assets/Bento_Grid (7).png';
 import folio2 from '@/assets/Bento_Grid (8).png';
 import sponserImg1 from '@/assets/sponser-img/mgi.png';
 import arrowuiIcon from '@/assets/ui-icons/Layer_1 (3).png';
+import SectionHeading from '@components/ui/SectionHeading';
 
 type Sponsor = {
    name: string;
@@ -99,14 +100,13 @@ export default function SponsorsSection() {
                </div>
 
                <div className='lpg-container'>
-                  <h2 className=' text-[45px] font-semibold tracking-[0.22em]'>
-                     SPONSORS
-                  </h2>
-                  <p className='mt-2 max-w-2xl text-[12px] leading-relaxed '>
-                     Lorem ipsum dolor sit amet consectetur. Ultrices volutpat
+                  <SectionHeading
+                     title=' SPONSORS'
+                     subtitle=' Lorem ipsum dolor sit amet consectetur. Ultrices volutpat
                      sollicitudin quis at in. In urna fermentum nunc sapien
-                     tortor.
-                  </p>
+                     tortor.'
+                  />
+
                   {/* sponsor cards, pyramid layout */}
                   <div className='mt-7 flex flex-col items-center gap-3'>
                      {sponsorRows.map((row, rowIndex) => (
@@ -153,8 +153,7 @@ export default function SponsorsSection() {
                      className='object-contain'
                   />
                </div>
-               <div
-                  className='pointer-events-none absolute inset-y-0 -top-1/2 right-0 hidden w-[330px] lg:block opacity-10 transform -scale-x-100 origin-center'>
+               <div className='pointer-events-none absolute inset-y-0 -top-1/2 right-0 hidden w-[330px] lg:block opacity-10 transform -scale-x-100 origin-center'>
                   <Image
                      src={arrowuiIcon}
                      alt=''
