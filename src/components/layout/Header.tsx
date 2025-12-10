@@ -35,15 +35,15 @@ export default function Header() {
             {/* Left spacer because of absolute logo */}
             <div className='ml-16 flex flex-1 items-center justify-between gap-6'>
                {/* Desktop nav */}
-               <nav className='hidden flex-1 items-center justify-end gap-3 lg:flex'>
+               <nav className='hidden flex-1 items-center justify-end gap-2 lg:flex'>
                   {MAIN_NAV.map(item => (
                      <Link
                         key={item.href}
                         href={item.href}
-                        className={`text-[13px] font-semibold ${
+                        className={`text-[15px] font-semibold ${
                            isActive(item.href)
                               ? 'text-[#75B553]'
-                              : 'text-[#1C2537] hover:text-[#75B553]'
+                              : ' hover:text-[#75B553]'
                         } uppercase transition-colors`}>
                         {item.label}
                      </Link>
