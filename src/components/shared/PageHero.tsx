@@ -48,7 +48,7 @@ export default function PageHero({
             } from-[#00000054] to-[#122047]`}
          />
 
-         {showHeader && <Header />}
+         {showHeader && <Header heroSize={heightClass[height]} />}
 
          {/* content */}
          <div className='relative flex flex-col items-center  justify-center px-4 text-center text-white h-[70%] pb-6 '>
