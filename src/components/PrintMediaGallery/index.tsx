@@ -1,70 +1,138 @@
 import PageHero from '@/components/shared/PageHero';
 import Footer from '@/components/layout/Footer';
 import newsHero from '@assets/newsfeed-img/banner.png';
+import news1 from './img/news1.png';
 
-import slide1 from '@assets/newsfeed-img/slider1.1.png';
-import slide2 from '@assets/newsfeed-img/slider1.2.png';
-import slide3 from '@assets/newsfeed-img/slider1.3.png';
+
 
 import AlbumsHeroSliderSection from '../ui/CardSliderwithStack';
-import AlbumsGridSection from './sections/album/AlbumsGridSection';
 import type {CardSlide} from '@components/ui/CardSliderwithStack';
+import GridCardSection from './../shared/GridCardsSection/index';
+const PrintMediaGallery = () => {
+   const cardSlides: CardSlide[] = [
+      {
+         id: 1,
+         title: 'Print Media Gallery',
+         description:
+            "We are Largest one and only LPG Auto Gas Station & Conversion Workshop Owner's Association in Bangladesh. Welcome to our Gallery",
+         images: [news1, news1, news1],
+         colSpan: 7, // ~58% width
+      },
+      {
+         id: 2,
+         title: 'Media Coverage',
+         description:
+            "We are Largest one and only LPG Auto Gas Station & Conversion Workshop Owner's Association in Bangladesh. Welcome to our Gallery",
+         colSpan: 5, // ~42% width
+      },
 
-const NewsFeedPage = () => {
+      {
+         id: 3,
+         title: 'Our Albums',
 
+         description:
+            "We are Largest one and only LPG Auto Gas Station & Conversion Workshop Owner's Association in Bangladesh. Welcome to our Gallery.",
+         images: [news1, news1, news1],
+      },
+      {
+         id: 4,
+         title: 'Our Albums',
+         description:
+            "We are Largest one and only LPG Auto Gas Station & Conversion Workshop Owner's Association in Bangladesh. Welcome to our Gallery.",
+         images: [news1, news1, news1],
+      },
+      {
+         id: 5,
+         title: 'Our Albums',
+         description:
+            "We are Largest one and only LPG Auto Gas Station & Conversion Workshop Owner's Association in Bangladesh. Welcome to our Gallery.",
+         images: [news1, news1, news1],
+      },
+      {
+         id: 6,
+         title: 'Print Media Gallery',
+         description:
+            "We are Largest one and only LPG Auto Gas Station & Conversion Workshop Owner's Association in Bangladesh. Welcome to our Gallery.",
+         // no images → just text card
+      },
+   ];
 
-  
-const cardSlides:CardSlide[]  = [
-  {
-    id: 1,
-    title: 'Our Albums',
-    description:
-      "We are Largest one and only LPG Auto Gas Station & Conversion Workshop Owner's Association in Bangladesh. Welcome to our Gallery.",
-    images: [slide1, slide2, slide3],
-    colSpan: 7, // ~58% width
-  },
-  {
-    id: 2,
-    title: 'Print Media Gallery',
-    description:
-      "We are Largest one and only LPG Auto Gas Station & Conversion Workshop Owner's Association in Bangladesh. Welcome to our Gallery.",
-    colSpan: 5, // ~42% width
-  },
+   const CARDS_PER_PAGE = 2;
 
-   {
-      id: 3,
-      title: 'Our Albums',
-     
-      description:
-         "We are Largest one and only LPG Auto Gas Station & Conversion Workshop Owner's Association in Bangladesh. Welcome to our Gallery.",
-      images: [slide1, slide2, slide3],
-   },
-   {
-      id: 4,
-      title: 'Our Albums',
-      description:
-         "We are Largest one and only LPG Auto Gas Station & Conversion Workshop Owner's Association in Bangladesh. Welcome to our Gallery.",
-      images: [slide1, slide2, slide3],
-   },
-   {
-      id: 5,
-      title: 'Our Albums',
-      description:
-         "We are Largest one and only LPG Auto Gas Station & Conversion Workshop Owner's Association in Bangladesh. Welcome to our Gallery.",
-      images: [slide1, slide2, slide3],
-   },
-   {
-      id: 6,
-      title: 'Print Media Gallery',
-      description:
-         "We are Largest one and only LPG Auto Gas Station & Conversion Workshop Owner's Association in Bangladesh. Welcome to our Gallery.",
-      // no images → just text card
-   },
-];
-
-const CARDS_PER_PAGE = 2;
-
-
+   const sectionCardData = [
+      {
+         id: 1,
+         title: 'Press Xpress Roundtable',
+         date: '8 july, 2019',
+         description:
+            'Lorem ipsum dolor sit amet consectetur. Et sed elementum ut tellus euismod. Eleifend nullam.',
+         image: news1,
+      },
+      {
+         id: 2,
+         title: 'E-bortoman news',
+         date: '11 JAN, 2020',
+         description:
+            'Lorem ipsum dolor sit amet consectetur. Et sed elementum ut tellus euismod. Eleifend nullam.',
+         image: news1,
+      },
+      {
+         id: 3,
+         title: 'Ajker desh',
+         date: '27 FEB, 2021',
+         description:
+            'Lorem ipsum dolor sit amet consectetur. Et sed elementum ut tellus euismod. Eleifend nullam.',
+         image: news1,
+      },
+      {
+         id: 4,
+         title: 'RANGPUR GENERAL MEETING',
+         date: '20 AUG, 2019',
+         description:
+            'Lorem ipsum dolor sit amet consectetur. Et sed elementum ut tellus euismod. Eleifend nullam.',
+         image: news1,
+      },
+      {
+         id: 5,
+         title: 'doinik jono kontho',
+         date: '13 SEP, 2021',
+         description:
+            'Lorem ipsum dolor sit amet consectetur. Et sed elementum ut tellus euismod. Eleifend nullam.',
+         image: news1,
+      },
+      {
+         id: 6,
+         title: 'GENERAL MEETING',
+         date: '1 JANUARY, 2022',
+         description:
+            'Lorem ipsum dolor sit amet consectetur. Et sed elementum ut tellus euismod. Eleifend nullam.',
+         image: news1,
+      },
+      {
+         id: 7,
+         title: 'PRESS XPRESS ROUNDTABLE',
+         date: '8 JULY, 2019',
+         description:
+            'Lorem ipsum dolor sit amet consectetur. Et sed elementum ut tellus euismod. Eleifend nullam.',
+         image: news1,
+      },
+      {
+         id: 8,
+         title: 'GENERAL MEETING',
+         date: '1 JANUARY, 2022',
+         description:
+            'Lorem ipsum dolor sit amet consectetur. Et sed elementum ut tellus euismod. Eleifend nullam.',
+         image: news1,
+      },
+      {
+         id: 9,
+         title: 'PRESS XPRESS ROUNDTABLE',
+         date: '8 JULY, 2019',
+         description:
+            'Lorem ipsum dolor sit amet consectetur. Et sed elementum ut tellus euismod. Eleifend nullam.',
+         image: news1,
+      },
+   ];
 
    return (
       <main className='relative '>
@@ -75,12 +143,20 @@ const CARDS_PER_PAGE = 2;
             height='compact'
          />
 
-        <AlbumsHeroSliderSection cardsPerPage={CARDS_PER_PAGE} cardSlides={cardSlides} />
-         <AlbumsGridSection />
+         <AlbumsHeroSliderSection
+            cardsPerPage={CARDS_PER_PAGE}
+            cardSlides={cardSlides}
+         />
+         <GridCardSection
+            columnPerRow='grid gap-5 sm:grid-cols-2 lg:grid-cols-3'
+            sectionCardData={sectionCardData}
+            title="Print Media Gallery"
+            description="We are Largest one and only LPG Auto Gas Station & Conversion Workshop Owner's Association in Bangladesh. Welcome to our Gallery"
+         />
 
          <Footer />
       </main>
    );
 };
 
-export default NewsFeedPage;
+export default PrintMediaGallery;
