@@ -8,6 +8,7 @@ type GridCardSectionProps = {
   columnPerRow?: string;
   title: string;
   description?: string;
+  videos?: boolean;
 };
 
 export default function GridCardSection({
@@ -15,6 +16,7 @@ export default function GridCardSection({
   columnPerRow = 'grid gap-5 sm:grid-cols-2 lg:grid-cols-3',
   title,
   description,
+  videos
 }: GridCardSectionProps) {
   return (
     <section className="relative bg-[linear-gradient(180deg,#F6FCF7_0%,#EDF8F1_100%)] pb-16 pt-10 md:pb-24 md:pt-14">
@@ -30,7 +32,7 @@ export default function GridCardSection({
 
         <div className={columnPerRow}>
           {sectionCardData.map(album => (
-            <AlbumCard key={album.id} album={album} />
+            <AlbumCard key={album.id} album={album}  videos={videos}/>
           ))}
         </div>
       </div>
