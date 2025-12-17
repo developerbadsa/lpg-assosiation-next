@@ -1,4 +1,4 @@
-import type {ContactItemType} from './ContactInfoCard';
+import type {ContactItemType} from '../../../shared/ContactSectionWithForm/ContactInfoCard';
 
 const ContactIcon = ({type}: {type: ContactItemType}) => {
    // shared size + color (parent wrapper already has text-white)

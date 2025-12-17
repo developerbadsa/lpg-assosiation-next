@@ -1,4 +1,4 @@
-import ContactIcon from './ContactIcon';
+import ContactIcon from '../../home/sections/ContactUsSection/ContactIcon';
 import Image, {StaticImageData} from 'next/image';
 import cardwrrapper from '@assets/wrappers/horizental-container-grid.png';
 

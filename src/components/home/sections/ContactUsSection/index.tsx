@@ -1,76 +1,52 @@
 'use client';
-
-import SectionHeading from '@/components/ui/SectionHeading';
-import ContactInfoCard from './ContactInfoCard';
-import type { ContactItem } from './ContactInfoCard';
-
-import callIcon from './img/call.png';
-import locationIcon from './img/location.png';
-import emailIcon from './img/email.png';
-import personIcon from './img/person.png';
-
-import ContactFormPanel from './ContactFormPanel';
-
-const CONTACT_ITEMS: ContactItem[] = [
-  {
-    id: 'person',
-    type: 'person',
-    label: 'CONTACT PERSON:',
-    value: 'MD. MOSHARAF HOSSAIN',
-    img: personIcon,
-  },
-  {
-    id: 'email',
-    type: 'email',
-    label: 'EMAIL:',
-    value: 'BDLPGAUTOGAS19@GMAIL.COM',
-    img: emailIcon,
-  },
-  {
-    id: 'phone',
-    type: 'phone',
-    label: 'CALL:',
-    value: '01704179247',
-    img: callIcon,
-  },
-  {
-    id: 'location',
-    type: 'location',
-    label: 'LOCATION:',
-    value: 'HOUSE - 2, ROAD - 2, PALLABI, MIRPUR, DHAKA-1216',
-    img: locationIcon,
-  },
-];
-
-const MAP_EMBED_URL =
-  'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d233668.0639611584!2d90.25488073778608!3d23.780753035026947!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3755b8b087026b81%3A0x8fa563bbdd5904c2!2sDhaka!5e0!3m2!1sen!2sbd!4v1765343345730!5m2!1sen!2sbd';
+import SectionHeading from './../../../ui/SectionHeading';
+import ContactUsWithForm from './../../../shared/ContactSectionWithForm/index';
 
 export default function ContactUsSection() {
-  return (
-    <section className="relative w-full py-16">
-      {/* soft top glow */}
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-[radial-gradient(circle_at_top,#E4F5FF80,_transparent_70%)]" />
-      {/* right-side dots */}
-      <div className="pointer-events-none absolute right-10 top-52 h-40 w-8 bg-[radial-gradient(circle,#D7E4F5_1.5px,transparent_1.5px)] bg-[length:10px_10px] opacity-80" />
+   return (
+      <section className='relative w-full py-16'>
+         {/* soft top glow */}
+         <div className='pointer-events-none absolute inset-x-0 top-0 h-40 bg-[radial-gradient(circle_at_top,#E4F5FF80,_transparent_70%)]' />
+         {/* right-side dots */}
+         <div className='pointer-events-none absolute right-10 top-52 h-40 w-8 bg-[radial-gradient(circle,#D7E4F5_1.5px,transparent_1.5px)] bg-[length:10px_10px] opacity-80' />
 
-      <div className="lpg-container relative">
-        <SectionHeading
-          title="CONTACT US"
-          subtitle="Have questions or need assistance? Our team is here to help. Reach out to us anytime for quick, friendly, and reliable support."
-        />
+         <div className='lpg-container relative'>
+            <SectionHeading
+               title='CONTACT US'
+               subtitle='Have questions or need assistance? Our team is here to help. Reach out to us anytime for quick, friendly, and reliable support.'
+            />
 
-        <div className="mt-10 grid gap-6 lg:grid-cols-[440px_minmax(0,1fr)]">
-          {/* LEFT: contact cards */}
+            {/* <div className="mt-10 grid gap-6 lg:grid-cols-[440px_minmax(0,1fr)]">
+    
           <div className="flex flex-col gap-5">
             {CONTACT_ITEMS.map(item => (
               <ContactInfoCard key={item.id} item={item} />
             ))}
           </div>
 
-          {/* RIGHT: map + form, extracted */}
           <ContactFormPanel mapUrl={MAP_EMBED_URL} />
-        </div>
-      </div>
-    </section>
-  );
+        </div> */}
+
+            <ContactUsWithForm />
+         </div>
+      </section>
+   );
 }
+
+// <div className="lpg-container relative">
+//   <SectionHeading
+//     title="CONTACT US"
+//     subtitle="Have questions or need assistance? Our team is here to help. Reach out to us anytime for quick, friendly, and reliable support."
+//   />
+
+//   <div className="mt-10 grid gap-6 lg:grid-cols-[440px_minmax(0,1fr)]">
+
+//     <div className="flex flex-col gap-5">
+//       {CONTACT_ITEMS.map(item => (
+//         <ContactInfoCard key={item.id} item={item} />
+//       ))}
+//     </div>
+
+//     <ContactFormPanel mapUrl={MAP_EMBED_URL} />
+//   </div>
+// </div>
