@@ -1,78 +1,58 @@
 export type Member = {
   sl: number;
+  photoUrl: string;
   ownerName: string;
   memberId: string;
   stations: string[];
   zone: string;
   district: string;
   upazila: string;
-  photoUrl: string;
 };
 
-const ZONES = ['Rajshahi', 'Dhaka', 'Chattogram', 'Khulna', 'Barishal', 'Rangpur', 'Sylhet', 'Mymensingh'];
-const DISTRICTS = ['Rajshahi', 'Dhaka', 'Gazipur', 'Chattogram', 'Cumilla', 'Khulna', 'Barishal', 'Rangpur', 'Sylhet'];
-const UPAZILAS = ['Paba', 'Savar', 'Tongi', 'Kotwali', 'Patiya', 'Daudkandi', 'Sonadanga', 'Panchagarh', 'Beanibazar'];
-
-const NAMES = [
+const OWNER_NAMES = [
   'Engr. Md. Serajul Mawla',
-  'Engr. Hasin Parfez',
-  'Engr. Md. Arif Hossain',
-  'Engr. Mahmudul Hasan',
-  'Md. Rezaul Karim',
-  'Md. Nazmul Islam',
-  'Sabrina Rahman',
-  'Mst. Jannatul Ferdous',
-  'Md. Ashikur Rahman',
-  'Md. Tanvir Ahmed',
-  'Md. Saif Uddin',
-  'Engr. Iftekhar Hossain',
+  'Engr. Md. Serajul Mawla',
+  'Engr. Md. Serajul Mawla',
+  'Engr. Md. Serajul Mawla',
 ];
 
-const STATIONS = [
-  'Saad Motors',
-  'MS Aladhin Filling Station',
-  'Saad Motors LPG Autogas Station',
-  'SS LPG Autogas Filling Station',
-  'Green Fuel Autogas',
-  'Orion LPG Station',
+const STATIONS_POOL: string[][] = [
+  // first style (multi line like screenshot)
+  ['Saad Motors', 'MIS Aladhin Filling Station', 'Saad Motors LPG Autogas Station', 'SS LPG Autogas Filling Station'],
+  // single line styles
+  ['Saad Motors'],
+  ['Green LPG Auto Gas'],
+  ['Orion LPG Station'],
+  ['A Rahman & sons'],
 ];
 
-function pick<T>(arr: T[], i: number) {
-  return arr[i % arr.length];
+const ZONES = ['Rajshahi', 'Barisal', 'Dhaka', 'Chattogram', 'Khulna', 'Sylhet', 'Rangpur', 'Mymensingh'];
+const DISTRICTS = ['Rajshahi', 'Barisal', 'Dhaka', 'Chattogram', 'Khulna', 'Sylhet'];
+const UPAZILAS = ['Paba', 'Barisal Sadar', 'Kotwali', 'Pahartali', 'Sonadanga', 'South Surma'];
+
+function makeMemberId(sl: number) {
+  // screenshot-like numeric id (ex: 21020111)
+  return String(21020111 + sl - 1);
 }
 
-function makeStations(i: number) {
-  // first row in screenshot has multiple lines; mimic that pattern occasionally
-  if (i % 9 === 0) return [pick(STATIONS, i), pick(STATIONS, i + 1), pick(STATIONS, i + 2), pick(STATIONS, i + 3)];
-  if (i % 4 === 0) return [pick(STATIONS, i), pick(STATIONS, i + 1)];
-  return [pick(STATIONS, i)];
-}
+export const MOCK_MEMBERS: Member[] = Array.from({ length: 395 }, (_, idx) => {
+  const sl = idx + 1;
 
-function makePhotoUrl(seed: string) {
-  // stable avatar generator (works fine with <img> without Next config)
-  return `https://api.dicebear.com/9.x/notionists/svg?seed=${encodeURIComponent(seed)}`;
-}
+  // Make row-1 multi-station like screenshot, then mostly single-station
+  const stations = idx === 0 ? STATIONS_POOL[0] : STATIONS_POOL[1 + (idx % (STATIONS_POOL.length - 1))];
 
-export function buildMockMembers(total = 395): Member[] {
-  const out: Member[] = [];
-  for (let i = 1; i <= total; i++) {
-    const ownerName = pick(NAMES, i);
-    const zone = pick(ZONES, i);
-    const district = pick(DISTRICTS, i + 2);
-    const upazila = pick(UPAZILAS, i + 3);
+  const zone = ZONES[idx % ZONES.length];
+  const district = DISTRICTS[idx % DISTRICTS.length];
+  const upazila = UPAZILAS[idx % UPAZILAS.length];
 
-    out.push({
-      sl: i,
-      ownerName,
-      memberId: `2102${String(1000 + (i % 900)).padStart(4, '0')}`,
-      stations: makeStations(i),
-      zone,
-      district,
-      upazila,
-      photoUrl: makePhotoUrl(`${ownerName}-${i}`),
-    });
-  }
-  return out;
-}
-
-export const MOCK_MEMBERS: Member[] = buildMockMembers(395);
+  return {
+    sl,
+    photoUrl: `https://i.pravatar.cc/80?img=${(idx % 70) + 1}`,
+    ownerName: OWNER_NAMES[idx % OWNER_NAMES.length],
+    memberId: makeMemberId(sl),
+    stations,
+    zone,
+    district,
+    upazila,
+  };
+});

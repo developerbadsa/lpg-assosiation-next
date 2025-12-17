@@ -1,5 +1,5 @@
 
-import CentralCommitteePage from './../../components/committee/index';
+import CentralCommitteePage from '@components/committee/index';
 export default function CentralCommittee() {
   return <CentralCommitteePage/>
 }
