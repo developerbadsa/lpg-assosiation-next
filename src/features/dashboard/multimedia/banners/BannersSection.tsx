@@ -40,7 +40,7 @@ export default function BannersSection() {
 
     setItems((prev) => {
       const target = prev.find((x) => x.id === id);
-      if (target?.imageSrc?.startsWith('blob:')) {
+      if (typeof target?.imageSrc === 'string' && target.imageSrc.startsWith('blob:')) {
         URL.revokeObjectURL(target.imageSrc);
         objectUrlsRef.current = objectUrlsRef.current.filter(
           (u) => u !== target.imageSrc
