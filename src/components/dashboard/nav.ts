@@ -34,7 +34,7 @@ export const DASH_NAV: NavItem[] = [
     children: [
       { label: 'Unverified Owner', href: '/manage-owners/unverified' },
       { label: 'Verified Owner', href: '/manage-owners/verified' },
-      { label: 'Register new Owner', href: '/manage-owners/register' },
+      { label: 'Register new Owner', href: '/manage-owners/register-owner' },
     ],
   },
 

@@ -87,6 +87,8 @@ type Props<T> = {
 
    showTopBar?: boolean; // default true
    showExport?: boolean; // default true
+   topSlot?: ReactNode; // renders between top bar and controls row
+   cellWrapClassName?: string; // controls row height (for pixel match)
 };
 
 export default function TablePanel<T>({
@@ -100,6 +102,8 @@ export default function TablePanel<T>({
    className,
    showTopBar = true,
    showExport = true,
+   topSlot,
+   cellWrapClassName,
 }: Props<T>) {
    const s = useTablePanel({rows, columns, searchText});
 
@@ -109,6 +113,8 @@ export default function TablePanel<T>({
          <span className='text-[#133374]'>{s.filteredTotal}</span>
       </div>
    );
+
+   const cellWrap = cellWrapClassName ?? 'min-h-[60px] py-2 flex items-center';
 
    return (
       <div
@@ -160,6 +166,8 @@ export default function TablePanel<T>({
                )}
             </div>
          )}
+
+         {topSlot ? <div className='mt-4'>{topSlot}</div> : null}
 
          {/* controls row */}
          <div className='mt-4 flex flex-col gap-3 md:flex-row md:items-center md:justify-between'>
@@ -245,20 +253,17 @@ export default function TablePanel<T>({
                      {s.pageRows.map((row, rIdx) => (
                         <tr
                            key={getRowKey(row, rIdx)}
-                           className='border-t border-black/5 py-2'>
+                           className='border-t border-black/5'>
                            {columns.map((col, cIdx) => (
                               <td
                                  key={col.id}
                                  className={cx(
-                                    'px-4  text-[11px] text-primary ',
-                                    // alignClass(col.align),
+                                    'px-4 text-[11px] text-primary',
                                     cIdx !== columns.length - 1 &&
-                                       'border-r border-black/5'
-                                    // col.cellClassName
+                                       'border-r border-black/5',
+                                    col.cellClassName
                                  )}>
-                                 <div className='min-h-[60px] py-2 flex items-center'>
-                                    {col.cell(row)}
-                                 </div>
+                                 <div className={cellWrap}>{col.cell(row)}</div>
                               </td>
                            ))}
                         </tr>

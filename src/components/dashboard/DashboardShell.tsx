@@ -8,7 +8,7 @@ export default function DashboardShell({
 }) {
    return (
       <div className='min-h-dvh bg-white'>
-         <div className='mx-auto flex min-h-dvh w-full max-w-[1400px]'>
+         <div className='mx-auto flex min-h-dvh w-full '>
             <Sidebar />
 
             <div className='flex min-w-0 flex-1 flex-col'>
