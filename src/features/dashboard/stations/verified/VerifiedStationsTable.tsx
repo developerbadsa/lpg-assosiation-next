@@ -2,7 +2,7 @@
 'use client';
 
 import { useMemo } from 'react';
-import { Database, FileSpreadsheet, Eye, Pencil, FileText } from 'lucide-react';
+import { Database, Eye, Pencil, FileText } from 'lucide-react';
 
 import TablePanel from '@/components/ui/table-panel/TablePanel';
 import type { ColumnDef } from '@/components/ui/table-panel/types';
@@ -223,13 +223,6 @@ export default function VerifiedStationsTable() {
         </button>
       )}
       className="bg-transparent p-0 shadow-none backdrop-blur-0"
-      topBarClassName="mt-2 flex flex-col gap-6 md:flex-row md:items-center md:justify-between"
-      exportButtonClassName="h-[46px] w-[270px] rounded-[10px] px-6 text-[18px] font-medium gap-3"
-      controlsTextClassName="text-[20px] font-normal text-[#0A2F59]"
-      selectClassName="h-[44px] w-[84px] rounded-[10px] border border-black/15 px-4 text-[18px] text-[#9AA6B2]"
-      searchInputClassName="h-[44px] rounded-[10px] border border-black/15 px-4 text-[18px] text-[#2B3A4A] md:w-[220px]"
-      tableWrapClassName="mt-8 overflow-hidden rounded-[12px] border border-black/10 bg-white shadow-[0_18px_55px_rgba(0,0,0,0.12)]"
-      cellWrapClassName="min-h-[92px] py-6 flex items-center"
     />
   );
 }
