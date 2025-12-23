@@ -1,4 +1,4 @@
-// src/features/dashboard/settings/district/DistrictTable.tsx
+
 'use client';
 
 import {useMemo} from 'react';
