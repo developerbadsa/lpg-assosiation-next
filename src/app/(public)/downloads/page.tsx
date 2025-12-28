@@ -1,7 +1,7 @@
 import PageHero from '@/components/shared/PageHero';
 import Footer from '@/components/layout/Footer';
 
-import heroBg from './../../assets/bg-img/download-banner.png';
+import heroBg from '@assets/bg-img/download-banner.png';
 import DownloadsSection from '@/components/downloads/DownloadsSection';
 
 export default function DownloadPage() {
