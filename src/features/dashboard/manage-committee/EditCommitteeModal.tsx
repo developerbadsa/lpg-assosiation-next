@@ -192,7 +192,7 @@ export default function EditCommitteeModal({ open, onClose, value }: Props) {
 
               updateM.mutate(
                 {
-                  id: String(value.id),
+                  id: value.id,
                   positionName: positionName.trim(),
                   positionSlug: positionSlug.trim(),
                   positionOrder,
