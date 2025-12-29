@@ -1,4 +1,4 @@
-import type { CommitteeApiItem, CommitteeRow } from './types';
+import type {CommitteeApiItem, CommitteeRow} from './types';
 
 const LARAVEL_ORIGIN =
   process.env.NEXT_PUBLIC_LARAVEL_ORIGIN ?? 'https://admin.petroleumstationbd.com';
@@ -28,14 +28,56 @@ async function readJsonOrThrow(res: Response) {
   return data;
 }
 
+function normalizeUrl(v?: string | null) {
+  const t = (v ?? '').trim();
+  if (!t) return '';
+  if (/^https?:\/\//i.test(t)) return t;
+  return `https://${t}`;
+}
+
+export type CreateCommitteeInput = {
+  positionName: string;
+  positionSlug: string;
+  positionOrder: number;
+  fullName: string;
+  designation: string;
+  companyName: string;
+  isActive: boolean;
+  profileImage: File;
+
+  facebookUrl?: string;
+  linkedinUrl?: string;
+  whatsappUrl?: string;
+};
+
+export type CommitteeUpdateInput = {
+  id: number;
+
+  positionName: string;
+  positionSlug: string;
+  positionOrder: number;
+  fullName: string;
+  designation: string;
+  companyName: string;
+  isActive: boolean;
+
+  // optional on update
+  profileImage?: File | null;
+
+  facebookUrl?: string;
+  linkedinUrl?: string;
+  whatsappUrl?: string;
+};
+
 export const committeeRepo = {
   async list(): Promise<CommitteeRow[]> {
-    const res = await fetch('/api/central-committees', { cache: 'no-store' });
+    const res = await fetch('/api/central-committees', {cache: 'no-store'});
     const raw = await readJsonOrThrow(res);
     const list = normalizeList(raw);
 
     return list.map((m) => {
       const profileImageUrl = toAbsoluteUrl(m.profile_image);
+
       return {
         id: m.id,
 
@@ -59,8 +101,73 @@ export const committeeRepo = {
     });
   },
 
+  async create(input: CreateCommitteeInput) {
+    const fd = new FormData();
+
+    fd.set('position_name', input.positionName);
+    fd.set('position_slug', input.positionSlug);
+    fd.set('position_order', String(input.positionOrder));
+    fd.set('full_name', input.fullName);
+    fd.set('designation', input.designation);
+    fd.set('company_name', input.companyName);
+    fd.set('is_active', input.isActive ? '1' : '0');
+
+    fd.set('profile_image', input.profileImage);
+
+    const fb = normalizeUrl(input.facebookUrl);
+    const ln = normalizeUrl(input.linkedinUrl);
+    const wa = normalizeUrl(input.whatsappUrl);
+
+    if (fb) fd.set('facebook_url', fb);
+    if (ln) fd.set('linkedin_url', ln);
+    if (wa) fd.set('whatsapp_url', wa);
+
+    const res = await fetch('/api/central-committees', {
+      method: 'POST',
+      body: fd,
+    });
+
+    return readJsonOrThrow(res);
+  },
+
+  async update(input: CommitteeUpdateInput) {
+    const fd = new FormData();
+
+    fd.set('position_name', input.positionName);
+    fd.set('position_slug', input.positionSlug);
+    fd.set('position_order', String(input.positionOrder));
+    fd.set('full_name', input.fullName);
+    fd.set('designation', input.designation);
+    fd.set('company_name', input.companyName);
+    fd.set('is_active', input.isActive ? '1' : '0');
+
+    const fb = normalizeUrl(input.facebookUrl);
+    const ln = normalizeUrl(input.linkedinUrl);
+    const wa = normalizeUrl(input.whatsappUrl);
+
+    if (fb) fd.set('facebook_url', fb);
+    if (ln) fd.set('linkedin_url', ln);
+    if (wa) fd.set('whatsapp_url', wa);
+
+    // optional on update
+    if (input.profileImage) fd.set('profile_image', input.profileImage);
+
+    // Laravel update pattern (for file uploads)
+    fd.set('_method', 'PUT');
+
+    const res = await fetch(`/api/central-committees/${input.id}`, {
+      method: 'POST',
+      body: fd,
+    });
+
+    return readJsonOrThrow(res);
+  },
+
   async remove(id: number): Promise<void> {
-    const res = await fetch(`/api/central-committees/${id}`, { method: 'DELETE' });
+    const res = await fetch(`/api/central-committees/${id}`, {
+      method: 'DELETE',
+    });
+
     await readJsonOrThrow(res);
   },
 };

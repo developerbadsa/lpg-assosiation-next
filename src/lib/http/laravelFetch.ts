@@ -42,7 +42,6 @@ export async function laravelFetch<T>(
    const base =
       process.env.API_BASE_URL ?? 'https://admin.petroleumstationbd.com/api';
    const url = joinUrl(base, path);
-
    const token = await getToken();
    const auth = init.auth ?? true;
 

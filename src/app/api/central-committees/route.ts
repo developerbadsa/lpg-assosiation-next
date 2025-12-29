@@ -3,7 +3,10 @@ import { laravelFetch, LaravelHttpError } from '@/lib/http/laravelFetch';
 
 export async function GET() {
   try {
-    const data = await laravelFetch('/central-committees', { method: 'GET', auth: true });
+    const data = await laravelFetch('/central-committees', {
+      method: 'GET',
+      auth: true,
+    });
     return NextResponse.json(data, { status: 200 });
   } catch (e) {
     if (e instanceof LaravelHttpError) {
@@ -12,18 +15,18 @@ export async function GET() {
         { status: e.status }
       );
     }
-    return NextResponse.json({ message: 'Failed to load committees' }, { status: 500 });
+    return NextResponse.json({ message: 'Failed to load committee list' }, { status: 500 });
   }
 }
 
 export async function POST(req: Request) {
   try {
-    const form = await req.formData();
+    const formData = await req.formData();
 
     const data = await laravelFetch('/central-committees', {
       method: 'POST',
       auth: true,
-      body: form,
+      body: formData,
     });
 
     return NextResponse.json(data, { status: 200 });
@@ -34,6 +37,6 @@ export async function POST(req: Request) {
         { status: e.status }
       );
     }
-    return NextResponse.json({ message: 'Failed to create committee' }, { status: 500 });
+    return NextResponse.json({ message: 'Failed to create committee member' }, { status: 500 });
   }
 }
