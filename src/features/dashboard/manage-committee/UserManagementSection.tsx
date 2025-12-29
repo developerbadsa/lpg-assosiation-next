@@ -137,7 +137,7 @@ export default function UserManagementSection() {
             <TablePanel<CommitteeRow>
                rows={rows}
                columns={columns}
-               getRowKey={r => r.id}
+               getRowKey={(r) => String(r.id)}
                searchText={r =>
                   `${r.fullName} ${r.designation} ${r.companyName} ${r.positionName} ${r.positionSlug}`
                }

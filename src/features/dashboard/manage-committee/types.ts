@@ -1,5 +1,5 @@
 export type CommitteeApiItem = {
-  id: number | number;
+  id: number;
   position_name: string;
   position_slug: string;
   position_order: number;
@@ -16,7 +16,7 @@ export type CommitteeApiItem = {
 };
 
 export type CommitteeRow = {
-  id: string | number;
+  id: string;
 
   fullName: string;
   designation: string;
