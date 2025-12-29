@@ -65,12 +65,12 @@ export default function PopupAdCard({
 
         {/* actions (bottom-right like screenshot) */}
         <div className='mt-3 flex items-center justify-end gap-2'>
-          <ActionCircle
+          {/* <ActionCircle
             ariaLabel='Edit'
             className='bg-[#26B35B]'
             onClick={onEdit}
             icon={<Pencil size={14} className='text-white' />}
-          />
+          /> */}
           <ActionCircle
             ariaLabel='Delete'
             className='bg-[#E74C3C]'

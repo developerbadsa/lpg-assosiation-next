@@ -38,7 +38,8 @@ export default function MediaCard({
         'overflow-hidden rounded-[10px] bg-white',
         'shadow-[0_18px_45px_rgba(0,0,0,0.14)]',
         className
-      )}>
+      )}
+    >
       <div className='relative aspect-[16/9] w-full bg-slate-100'>
         <Image
           src={thumbnail}
@@ -50,11 +51,19 @@ export default function MediaCard({
         />
 
         {variant === 'video' && (
-          <div className='absolute inset-0 grid place-items-center'>
-            <div className='grid h-11 w-11 place-items-center rounded-full bg-white/90 shadow-sm'>
+          <button
+            type='button'
+            aria-label='Play video'
+            onClick={(e) => {
+              e.stopPropagation();
+              onView?.();
+            }}
+            className='absolute inset-0 grid place-items-center'
+          >
+            <span className='grid h-11 w-11 place-items-center rounded-full bg-white/90 shadow-sm'>
               <Play size={18} className='translate-x-[1px] text-slate-700' />
-            </div>
-          </div>
+            </span>
+          </button>
         )}
       </div>
 
