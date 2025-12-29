@@ -1,18 +1,15 @@
 'use client';
 
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { MOCK_MESSAGES } from './mock';
-import type { InboxMessage } from './types';
-
-const delay = (ms: number) => new Promise((r) => setTimeout(r, ms));
+import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
+import {inboxRepo} from './repo';
+import type {InboxMessage} from './types';
 
 export function useInboxMessages() {
   return useQuery({
-    queryKey: ['inbox-messages'],
-    queryFn: async (): Promise<InboxMessage[]> => {
-      await delay(350);
-      return MOCK_MESSAGES;
-    },
+    queryKey: ['inbox', 'messages'],
+    queryFn: () => inboxRepo.list(),
+    staleTime: 20_000,
+    refetchOnWindowFocus: false,
   });
 }
 
@@ -20,33 +17,42 @@ export function useTrashMessage() {
   const qc = useQueryClient();
 
   return useMutation({
-    mutationFn: async (id: string) => {
-      await delay(250);
-      return { ok: true, id };
-    },
+    mutationFn: (id: number) => inboxRepo.remove(id),
+
     onMutate: async (id) => {
-      await qc.cancelQueries({ queryKey: ['inbox-messages'] });
-      const prev = qc.getQueryData<InboxMessage[]>(['inbox-messages']) ?? [];
+      await qc.cancelQueries({queryKey: ['inbox', 'messages']});
+
+      const prev = qc.getQueryData<InboxMessage[]>(['inbox', 'messages']) ?? [];
       qc.setQueryData<InboxMessage[]>(
-        ['inbox-messages'],
+        ['inbox', 'messages'],
         prev.filter((m) => m.id !== id)
       );
-      return { prev };
+
+      return {prev};
     },
+
     onError: (_err, _id, ctx) => {
-      if (ctx?.prev) qc.setQueryData(['inbox-messages'], ctx.prev);
+      if (ctx?.prev) qc.setQueryData(['inbox', 'messages'], ctx.prev);
+    },
+
+    onSettled: () => {
+      qc.invalidateQueries({queryKey: ['inbox', 'messages']});
     },
   });
 }
 
 export function useSendReply() {
+  // There is no reply endpoint in your Laravel docs.
+  // So for now: open the user's email client via mailto.
   return useMutation({
-    mutationFn: async (payload: { messageId: string; text: string }) => {
-      await delay(450);
+    mutationFn: async (payload: {to: string; subject: string; body: string}) => {
+      const url =
+        `mailto:${encodeURIComponent(payload.to)}` +
+        `?subject=${encodeURIComponent(payload.subject)}` +
+        `&body=${encodeURIComponent(payload.body)}`;
 
-      // Mock: in real API, POST /inbox/reply
-      return { ok: true, ...payload };
+      window.location.href = url;
+      return {ok: true};
     },
   });
 }
-

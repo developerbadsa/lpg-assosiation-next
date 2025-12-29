@@ -1,8 +1,8 @@
 export type DashboardStats = {
   totalStations: number;
-  activeUsers: number;
   totalOwners: number;
-  totalNotices: number;
+  unreadMessages: number;
+  activeNotices: number;
 };
 
 export type MyProfile = {

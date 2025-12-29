@@ -15,10 +15,17 @@ export async function setToken(token: string) {
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'lax',
     path: '/',
+    maxAge: 60 * 60 * 24 * 30, // 30 days
   });
 }
 
 export async function clearToken() {
   const c = await cookies();
-  c.set(NAME, '', { httpOnly: true, path: '/', maxAge: 0 });
+  c.set(NAME, '', {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+    path: '/',
+    maxAge: 0,
+  });
 }

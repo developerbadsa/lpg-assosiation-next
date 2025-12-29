@@ -1,34 +1,32 @@
-import { env } from '@/lib/env';
-import { mockDelay } from '@/lib/mockDelay';
-import { MOCK_PROFILE, MOCK_STATS } from './mock';
-import type { DashboardStats, MyProfile } from './types';
+import type {DashboardStats} from './types';
 
 export type DashboardRepo = {
   getStats: () => Promise<DashboardStats>;
-  getMyProfile: () => Promise<MyProfile>;
 };
 
-const mockDashboardRepo: DashboardRepo = {
+type StatsApi = {
+  total_stations: number;
+  total_station_owners: number;
+  unread_messages: number;
+  active_notices: number;
+};
+
+async function readJsonOrThrow(res: Response) {
+  const data = await res.json().catch(() => null);
+  if (!res.ok) throw new Error(data?.message ?? 'Request failed');
+  return data;
+}
+
+export const dashboardRepo: DashboardRepo = {
   async getStats() {
-    await mockDelay(350);
-    return structuredClone(MOCK_STATS);
-  },
-  async getMyProfile() {
-    await mockDelay(350);
-    return structuredClone(MOCK_PROFILE);
+    const res = await fetch('/api/dashboard/stats', {cache: 'no-store'});
+    const data = (await readJsonOrThrow(res)) as StatsApi;
+
+    return {
+      totalStations: data.total_stations,
+      totalOwners: data.total_station_owners,
+      unreadMessages: data.unread_messages,
+      activeNotices: data.active_notices,
+    };
   },
 };
-
-// Later: wire with axios/fetch + auth token
-const apiDashboardRepo: DashboardRepo = {
-  async getStats() {
-    throw new Error('API repo not implemented yet');
-  },
-  async getMyProfile() {
-    throw new Error('API repo not implemented yet');
-  },
-};
-
-export const dashboardRepo: DashboardRepo = env.dataMode === 'mock'
-  ? mockDashboardRepo
-  : apiDashboardRepo;

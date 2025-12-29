@@ -1,17 +1,16 @@
 'use client';
 
-import { useMemo, useState } from 'react';
-import { MessageCircle } from 'lucide-react';
+import {useMemo, useState} from 'react';
+import {MessageCircle} from 'lucide-react';
 
 import ReplyModal from './ReplyModal';
-import { useInboxMessages, useSendReply, useTrashMessage } from './queries';
-import type { InboxMessage } from './types';
+import {useInboxMessages, useSendReply, useTrashMessage} from './queries';
+import type {InboxMessage} from './types';
 
 function cx(...v: Array<string | false | null | undefined>) {
   return v.filter(Boolean).join(' ');
 }
 
-const BRAND_GREEN = '#009970';
 const NAME_GREEN = '#75B551';
 const TEXT_DARK = '#133374';
 const TEXT_MUTED = '#7B8EA3';
@@ -80,10 +79,10 @@ function MessageRow({
 
         <div className="min-w-0">
           <div className="flex items-center gap-2">
-            <span className="text-[12px] font-semibold" style={{ color: NAME_GREEN }}>
+            <span className="text-[12px] font-semibold" style={{color: NAME_GREEN}}>
               {item.name}
             </span>
-            <span className="truncate text-[11px]" style={{ color: TEXT_MUTED }}>
+            <span className="truncate text-[11px]" style={{color: TEXT_MUTED}}>
               {item.message}
             </span>
           </div>
@@ -105,9 +104,7 @@ export default function InboxSection() {
   const [active, setActive] = useState<InboxMessage | null>(null);
   const [replyOpen, setReplyOpen] = useState(false);
 
-  // If your hook returns array directly, change this to:
-  // const items = Array.isArray(q) ? q : [];
-  const items = useMemo(() => (q?.data ?? []) as InboxMessage[], [q?.data]);
+  const items = useMemo(() => (q.data ?? []) as InboxMessage[], [q.data]);
 
   const anyBusy = trashM.isPending || sendM.isPending;
 
@@ -115,6 +112,7 @@ export default function InboxSection() {
     <section className="pb-10">
       <div className="mx-auto mt-10 flex max-w-[860px] flex-col items-center">
         <span>
+          {/* Your logo svg stays as-is */}
           <svg
             width={68}
             height={68}
@@ -144,39 +142,48 @@ export default function InboxSection() {
           </svg>
         </span>
 
-        <h2 className="mt-4 text-center text-[22px] font-semibold" style={{ color: TEXT_DARK }}>
+        <h2 className="mt-4 text-center text-[22px] font-semibold" style={{color: TEXT_DARK}}>
           Message
         </h2>
 
         <div className="mt-8 w-full rounded-[12px] bg-[#FAFBFF] px-10 py-4">
           {/* Loading */}
-          {q?.isLoading ? (
-            <div className="py-10 text-center text-[12px]" style={{ color: TEXT_MUTED }}>
+          {q.isLoading ? (
+            <div className="py-10 text-center text-[12px]" style={{color: TEXT_MUTED}}>
               Loading messages...
             </div>
           ) : null}
 
+          {/* Error */}
+          {q.isError ? (
+            <div className="py-10 text-center text-[12px] text-red-600">
+              {(q.error as Error)?.message ?? 'Failed to load messages.'}
+            </div>
+          ) : null}
+
           {/* Empty */}
-          {!q?.isLoading && items.length === 0 ? (
-            <div className="py-12 text-center text-[12px]" style={{ color: TEXT_MUTED }}>
+          {!q.isLoading && !q.isError && items.length === 0 ? (
+            <div className="py-12 text-center text-[12px]" style={{color: TEXT_MUTED}}>
               No messages found.
             </div>
           ) : null}
 
           {/* List */}
-          {items.map((m, idx) => (
-            <div key={m.id} className={cx(idx !== 0 && 'border-t border-black/5')}>
-              <MessageRow
-                item={m}
-                disabled={anyBusy}
-                onReply={() => {
-                  setActive(m);
-                  setReplyOpen(true);
-                }}
-                onTrash={() => trashM.mutate(m.id)}
-              />
-            </div>
-          ))}
+          {!q.isError
+            ? items.map((m, idx) => (
+                <div key={m.id} className={cx(idx !== 0 && 'border-t border-black/5')}>
+                  <MessageRow
+                    item={m}
+                    disabled={anyBusy}
+                    onReply={() => {
+                      setActive(m);
+                      setReplyOpen(true);
+                    }}
+                    onTrash={() => trashM.mutate(m.id)}
+                  />
+                </div>
+              ))
+            : null}
         </div>
       </div>
 
@@ -185,13 +192,20 @@ export default function InboxSection() {
         message={active}
         busy={sendM.isPending}
         onClose={() => setReplyOpen(false)}
-        onSend={({ messageId, text }) => {
+        onSend={({messageId, text}) => {
+          const msg = active;
+          if (!msg || String(msg.id) !== String(messageId)) return;
+
+          // There is no reply endpoint in your backend docs,
+          // so reply uses mailto for now.
           sendM.mutate(
-            { messageId, text },
             {
-              onSuccess: () => {
-                setReplyOpen(false);
-              },
+              to: msg.email,
+              subject: `Re: ${msg.subject}`,
+              body: `${text}\n\n---\nFrom: ${msg.name} (${msg.email})\nPhone: ${msg.phone}\n\n${msg.message}`,
+            },
+            {
+              onSuccess: () => setReplyOpen(false),
             }
           );
         }}

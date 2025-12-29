@@ -1,7 +1,10 @@
 export type InboxMessage = {
-  id: string;
+  id: number;
   name: string;
-  avatarUrl: string;
+  email: string;
+  phone: string;
+  subject: string;
   message: string;
-  timeLabel: string; 
+  timeLabel: string;
+  avatarUrl: string;
 };

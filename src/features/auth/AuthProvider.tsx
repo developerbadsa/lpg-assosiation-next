@@ -1,6 +1,14 @@
 'use client';
 
-import React, {createContext, useContext, useMemo, useState, useCallback} from 'react';
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
+import { useRouter } from 'next/navigation';
 
 export type AuthUser = {
   id: number;
@@ -28,34 +36,68 @@ export function AuthProvider({
   initialUser: AuthUser | null;
   children: React.ReactNode;
 }) {
+  const router = useRouter();
   const [user, setUser] = useState<AuthUser | null>(initialUser);
   const [loading, setLoading] = useState(false);
 
+  // Prevent refresh() races
+  const inFlight = useRef<Promise<void> | null>(null);
+
   const refresh = useCallback(async () => {
+    if (inFlight.current) return inFlight.current;
+
     setLoading(true);
-    try {
-      const res = await fetch('/api/auth/me', {cache: 'no-store'});
-      if (!res.ok) {
+
+    const p = (async () => {
+      let res: Response;
+      try {
+        res = await fetch('/api/auth/me', {
+          method: 'GET',
+          cache: 'no-store',
+          headers: { Accept: 'application/json' },
+        });
+      } catch {
+        // Network error: do NOT log out
+        return;
+      }
+
+      if (res.status === 401) {
+        // Only log out on explicit auth failure
         setUser(null);
         return;
       }
+
+      if (!res.ok) {
+        // Any other server error: keep current user
+        return;
+      }
+
       const u = (await res.json()) as AuthUser;
       setUser(u);
-    } finally {
+    })().finally(() => {
+      inFlight.current = null;
       setLoading(false);
-    }
+    });
+
+    inFlight.current = p;
+    return p;
   }, []);
 
   const logout = useCallback(async () => {
     setLoading(true);
     try {
-      await fetch('/api/auth/logout', {method: 'POST'});
-      setUser(null);
-      window.location.href = '/login';
+      // Even if this fails, we still clear local state and move to /login
+      await fetch('/api/auth/logout', {
+        method: 'POST',
+        headers: { Accept: 'application/json' },
+      });
     } finally {
+      setUser(null);
+      router.replace('/login');
+      router.refresh();
       setLoading(false);
     }
-  }, []);
+  }, [router]);
 
   const value = useMemo<AuthState>(
     () => ({

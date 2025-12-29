@@ -1,8 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { useMemo, useState } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
+import { useMemo, useState, useCallback } from 'react';
 import { ChevronDown } from 'lucide-react';
 import { DASH_FOOTER, DASH_NAV, type NavItem } from './nav';
 import { Logo } from './../ui/Logo';
@@ -13,6 +13,7 @@ const isActive = (pathname: string, href?: string) =>
 
 export default function Sidebar() {
   const pathname = usePathname();
+  const router = useRouter();
   const { logout, loading } = useAuth();
 
   const defaultOpenKeys = useMemo(() => {
@@ -31,29 +32,38 @@ export default function Sidebar() {
 
   const toggle = (key: string) => setOpen((s) => ({ ...s, [key]: !s[key] }));
 
+  const onLogout = useCallback(async () => {
+    try {
+      await logout(); // calls /api/auth/logout and clears user state
+    } finally {
+      router.replace('/login');
+      router.refresh();
+    }
+  }, [logout, router]);
+
   const renderItem = (item: NavItem) => {
     const Icon = item.icon;
 
-    //  ACTION: logout (button, not Link)
+    // ACTION ITEM (logout)
     if (item.action === 'logout') {
       return (
         <button
           key={item.key}
           type="button"
-          onClick={logout}
+          onClick={onLogout}
           disabled={loading}
           className={[
-            'mt-1 flex w-full items-center gap-2 rounded-xl px-3 py-2 text-sm text-left',
-            'text-slate-700 hover:bg-slate-100/70',
-            'disabled:opacity-60 disabled:hover:bg-transparent',
+            'mt-1 flex w-full items-center gap-2 rounded-xl px-3 py-2 text-sm text-slate-700 hover:bg-slate-100/70',
+            loading ? 'opacity-60' : '',
           ].join(' ')}
         >
           <Icon size={16} />
-          {loading ? 'Logging out...' : item.label}
+          {item.label}
         </button>
       );
     }
 
+    // GROUP
     if (item.children?.length) {
       const expanded = !!open[item.key];
       const groupActive = item.children.some((c) => isActive(pathname, c.href));
@@ -101,8 +111,8 @@ export default function Sidebar() {
       );
     }
 
+    // NORMAL LINK
     const active = isActive(pathname, item.href);
-
     return (
       <Link
         key={item.key}
