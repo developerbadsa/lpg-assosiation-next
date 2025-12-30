@@ -13,7 +13,7 @@ type PageHeroProps = {
    backgroundImage?: StaticImageData;
    height?: 'full' | 'compact';
    showHeader?: boolean;
-   overlayFrom?: string
+   overlayFrom?: string;
 };
 
 const heightClass: Record<NonNullable<PageHeroProps['height']>, string> = {

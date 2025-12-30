@@ -16,7 +16,8 @@ export default function Home() {
             overlayFrom='top'
             title={
                <>
-Bangladesh petroleum dealer&apos;s Distributor&apos;s Agent&apos;s & Petrol Pump Owner&apos;s Association
+                  Bangladesh petroleum dealer&apos;s Distributor&apos;s
+                  Agent&apos;s & Petrol Pump Owner&apos;s Association
                </>
             }
             subtitle='LICENSE NO: 21/2021 II REG. NO: To-1026/2021'
