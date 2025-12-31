@@ -171,10 +171,10 @@ export default function SponsorsSection() {
                   {leaders.map(leader => (
                      <article
                         key={leader.name}
-                        className='relative h-[620px] w-[480px] place-self-center overflow-visible rounded-t-[98px] rounded-b-[12px] border-[4px] border-[#CCD2F4] bg-white/95 px-6 pb-7 pt-10 shadow-[0_18px_40px_rgba(0,0,0,0.06)]'>
+                        className='relative min-h-[520px] w-full max-w-[480px] place-self-center overflow-visible rounded-t-[98px] rounded-b-[12px] border-[4px] border-[#CCD2F4] bg-white/95 px-6 pb-7 pt-10 shadow-[0_18px_40px_rgba(0,0,0,0.06)] md:min-h-[620px]'>
                         {/* photo circle */}
                         <div className='absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/3'>
-                           <div className='flex h-[270px] w-[270px] items-center justify-center rounded-full bg-[#CCD2F4] p-[4px]'>
+                           <div className='flex h-[200px] w-[200px] items-center justify-center rounded-full bg-[#CCD2F4] p-[4px] sm:h-[240px] sm:w-[240px] lg:h-[270px] lg:w-[270px]'>
                               <div className='relative h-full w-full overflow-hidden rounded-full bg-white'>
                                  <Image
                                     src={leader.photo}
