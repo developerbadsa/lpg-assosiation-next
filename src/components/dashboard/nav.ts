@@ -76,6 +76,8 @@ export const DASH_NAV: NavItem[] = [
     icon: Settings,
     children: [
       { label: 'Membership Fees', href: '/settings/membership-fees' },
+      { label: 'Other Businesses', href: '/settings/other-businesses' },
+      { label: 'Station Documents', href: '/settings/station-documents' },
       { label: 'Division', href: '/settings/division' },
       { label: 'District', href: '/settings/district' },
       { label: 'Upazila/Thana', href: '/settings/upazila-thana' },
