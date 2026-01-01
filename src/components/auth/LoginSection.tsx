@@ -4,6 +4,7 @@ import Link from 'next/link';
 import {useEffect, useMemo, useState} from 'react';
 import {useRouter} from 'next/navigation';
 import MeshCorners from '@/components/ui/MeshCorners';
+import {useAuth} from '@/features/auth/AuthProvider';
 
 type Step = 'PHONE' | 'OTP' | 'CREDS' | 'DONE';
 
@@ -61,12 +62,11 @@ export default function LoginSection() {
    const [phone, setPhone] = useState('');
    const [otp, setOtp] = useState('');
    const [meta, setMeta] = useState<OtpMeta | null>(null);
-
-   const [email, setEmail] = useState('');
    const [password, setPassword] = useState('');
 
    const [pending, setPending] = useState(false);
    const [error, setError] = useState<string | null>(null);
+   const {refresh} = useAuth();
 
    const [now, setNow] = useState(() => Date.now());
    useEffect(() => {
@@ -85,11 +85,7 @@ export default function LoginSection() {
    const canVerify =
       otp.length === OTP_LENGTH && Boolean(meta?.requestId) && !pending;
 
-   const canLogin =
-      isValidPhone(phone) &&
-      email.trim().length > 3 &&
-      password.length >= 4 &&
-      !pending;
+   const canLogin = isValidPhone(phone) && password.length >= 4 && !pending;
 
    const submitPhone = async () => {
       setError(null);
@@ -158,14 +154,9 @@ export default function LoginSection() {
       setError(null);
 
       const p = phone.trim();
-      const e = email.trim();
 
       if (!isValidPhone(p)) {
          setError('Please enter a valid phone number.');
-         return;
-      }
-      if (!e) {
-         setError('Please enter your email.');
          return;
       }
       if (!password) {
@@ -175,15 +166,14 @@ export default function LoginSection() {
 
       setPending(true);
       try {
-         // Your Next.js route handler should proxy to Laravel /login and set HttpOnly cookie
          const res = await fetch('/api/auth/login', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
                phone_number: p,
-               email: e,
                password,
             }),
+            credentials: 'include',
          });
 
          const data = await res.json().catch(() => null);
@@ -196,7 +186,8 @@ export default function LoginSection() {
 
             throw new Error(firstFieldError || data?.message || 'Login failed');
          }
-
+         await refresh();
+         router.refresh();
          setStep('DONE');
       } catch (e: any) {
          setError(e?.message ?? 'Login failed. Please try again.');
@@ -385,7 +376,7 @@ export default function LoginSection() {
                            </p>
 
                            <div className='space-y-3'>
-                              <div className='flex flex-col items-start justify-center gap-2 sm:flex-row sm:items-center sm:gap-3'>
+                              {/* <div className='flex flex-col items-start justify-center gap-2 sm:flex-row sm:items-center sm:gap-3'>
                                  <label className='w-full text-left text-[10px] text-[#6F8093] sm:w-auto sm:text-right'>
                                     Email
                                  </label>
@@ -399,7 +390,7 @@ export default function LoginSection() {
                                        'focus:border-[#0B8B4B]'
                                     )}
                                  />
-                              </div>
+                              </div> */}
 
                               <div className='flex flex-col items-start justify-center gap-2 sm:flex-row sm:items-center sm:gap-3'>
                                  <label className='w-full text-left text-[10px] text-[#6F8093] sm:w-auto sm:text-right'>
@@ -455,8 +446,6 @@ export default function LoginSection() {
                                  className='inline-flex h-8 items-center justify-center rounded-full bg-[#009970] px-6 text-[10px] font-semibold text-white shadow-sm transition hover:brightness-110 active:brightness-95'>
                                  Go to Dashboard
                               </button>
-
-                        
                            </div>
                         </div>
                      )}

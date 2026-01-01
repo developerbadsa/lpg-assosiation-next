@@ -7,6 +7,7 @@ import React, {
   useMemo,
   useRef,
   useState,
+   useEffect,
 } from 'react';
 import { useRouter } from 'next/navigation';
 
@@ -55,6 +56,7 @@ export function AuthProvider({
           method: 'GET',
           cache: 'no-store',
           headers: { Accept: 'application/json' },
+          credentials: 'include',
         });
       } catch {
         // Network error: do NOT log out
@@ -82,6 +84,10 @@ export function AuthProvider({
     inFlight.current = p;
     return p;
   }, []);
+  useEffect(() => {
+  if (!initialUser) refresh();
+}, [initialUser, refresh]);
+
 
   const logout = useCallback(async () => {
     setLoading(true);
