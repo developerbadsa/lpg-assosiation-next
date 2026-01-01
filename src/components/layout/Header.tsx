@@ -38,11 +38,11 @@ const MAIN_NAV: NavItem[] = [
          {label: 'ZONAL COMMITTEE', href: '/committee/zonal-committee'},
       ],
    },
-   {
-      key: 'news-feed',
-      label: 'News feed',
-      href: 'news-feed',
-   },
+   // {
+   //    key: 'news-feed',
+   //    label: 'News feed',
+   //    href: 'news-feed',
+   // },
    {
       key: 'stations',
       label: 'MEMBER STATIONS',
