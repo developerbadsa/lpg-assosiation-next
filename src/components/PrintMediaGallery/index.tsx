@@ -6,8 +6,6 @@ import Footer from '@/components/layout/Footer';
 import newsHero from '@assets/newsfeed-img/banner.png';
 import news1 from './img/news1.png';
 
-
-
 import AlbumsHeroSliderSection from '../ui/CardSliderwithStack';
 import type {CardSlide} from '@components/ui/CardSliderwithStack';
 import GridCardSection from './../shared/GridCardsSection/index';
@@ -88,14 +86,16 @@ const PrintMediaGallery = () => {
             const data = await res.json().catch(() => null);
             const list = normalizeList(data);
 
-            const slides: CardSlide[] = list.map(album => ({
-               id: album.id,
-               title: album.title ?? 'Our Albums',
-               description: album.description ?? DEFAULT_DESCRIPTION,
-               images: album.cover_url
-                  ? [resolveCoverUrl(album.cover_url)]
-                  : undefined,
-            }));
+            const slides: CardSlide[] = list.map(album => {
+               const cover = resolveCoverUrl(album.cover_url);
+
+               return {
+                  id: album.id,
+                  title: album.title ?? 'Our Albums',
+                  description: album.description ?? DEFAULT_DESCRIPTION,
+                  images: cover ? [cover] : undefined,
+               };
+            });
 
             const cards: AlbumCardData[] = list.map(album => ({
                id: album.id,
@@ -133,7 +133,7 @@ const PrintMediaGallery = () => {
          <GridCardSection
             columnPerRow='grid gap-5 sm:grid-cols-2 lg:grid-cols-3'
             sectionCardData={sectionCardData}
-            title="Print Media Gallery"
+            title='Print Media Gallery'
             description="We are Largest one and only LPG Auto Gas Station & Conversion Workshop Owner's Association in Bangladesh. Welcome to our Gallery"
          />
 
