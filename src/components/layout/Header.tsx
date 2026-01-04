@@ -176,6 +176,7 @@ export default function Header({heroSize = ''}: {heroSize?: string}) {
             <div className='relative flex h-[70px] w-full items-center justify-between rounded-full bg-white shadow-[0_12px_40px_rgba(0,0,0,0.25)] backdrop-blur lpg-container overflow-visible md:h-[85px]'>
                <Link
                   href='/'
+                  prefetch={false}
                   className='absolute left-0 flex h-full w-[120px] items-center justify-center rounded-l-full bg-[#EEF0FB] md:w-[175px]'>
                   <div className='relative h-[62px] w-[62px] overflow-hidden rounded-full md:h-[82px] md:w-[82px] md:scale-[1.5]'>
                      <Logo />
@@ -200,6 +201,7 @@ export default function Header({heroSize = ''}: {heroSize?: string}) {
                               }>
                               <Link
                                  href={item.href}
+                                 prefetch={false}
                                  aria-haspopup={
                                     hasChildren ? 'menu' : undefined
                                  }
@@ -253,6 +255,7 @@ export default function Header({heroSize = ''}: {heroSize?: string}) {
                                              <li key={child.href}>
                                                 <Link
                                                    href={child.href}
+                                                   prefetch={false}
                                                    className='dropdown-item'
                                                    role='menuitem'
                                                    onClick={() =>
