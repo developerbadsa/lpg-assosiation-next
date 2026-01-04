@@ -7,6 +7,12 @@ async function readBody(req: Request) {
   return await req.json().catch(() => null);
 }
 
+async function readBody(req: Request) {
+  const ct = req.headers.get('content-type') ?? '';
+  if (ct.includes('multipart/form-data')) return await req.formData();
+  return await req.json().catch(() => null);
+}
+
 type Ctx = { params: Promise<{ id: string }> };
 
 export async function DELETE(_req: NextRequest, ctx: Ctx) {
@@ -43,6 +49,17 @@ export async function GET(_req: NextRequest, ctx: Ctx) {
     }
     return NextResponse.json({ message: 'Failed to load station' }, { status: 500 });
   }
+}
+
+export async function GET(_req: NextRequest, ctx: Ctx) {
+  const { id } = await ctx.params;
+
+  const data = await laravelFetch<any>(`/gas-stations/${id}`, {
+    method: 'GET',
+    auth: true,
+  });
+
+  return NextResponse.json(data);
 }
 
 export async function PUT(req: NextRequest, ctx: Ctx) {
