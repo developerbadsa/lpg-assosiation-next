@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Loader from '@/components/shared/Loader';
 import { normalizeList } from '@/lib/http/normalize';
@@ -16,10 +16,23 @@ type AlbumImageApiRow = {
   image_path?: string | null;
 };
 
+type AlbumApiResponse = {
+  id?: number | string | null;
+  title?: string | null;
+  images?: AlbumImageApiRow[] | null;
+};
+
 type AlbumImageRow = {
   id: number;
   url: string;
 };
+
+function normalizeAlbum(raw: any): AlbumApiResponse | null {
+  if (!raw) return null;
+  if (raw?.data && !Array.isArray(raw.data)) return raw.data as AlbumApiResponse;
+  if (raw?.data?.data && !Array.isArray(raw.data.data)) return raw.data.data as AlbumApiResponse;
+  return raw as AlbumApiResponse;
+}
 
 function mapRow(row: AlbumImageApiRow): AlbumImageRow | null {
   const idNum = Number(row.id);
@@ -42,27 +55,36 @@ function mapRow(row: AlbumImageApiRow): AlbumImageRow | null {
 export default function AlbumImagesSection({ albumId }: { albumId: string }) {
   const router = useRouter();
   const [items, setItems] = useState<AlbumImageRow[]>([]);
+  const [albumTitle, setAlbumTitle] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [file, setFile] = useState<File | null>(null);
+  const [error, setError] = useState('');
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const gridItems = useMemo(() => items, [items]);
 
   const load = async () => {
     setLoading(true);
+    setError('');
     try {
-      const res = await fetch(`/api/album-images?album_id=${encodeURIComponent(albumId)}`, {
+      const res = await fetch(`/api/albums/${encodeURIComponent(albumId)}`, {
         method: 'GET',
         cache: 'no-store',
         headers: { Accept: 'application/json' },
       });
 
       const raw = await res.json().catch(() => null);
-      if (!res.ok) return;
+      if (!res.ok) {
+        setError(raw?.message ?? 'Failed to load album images');
+        return;
+      }
 
-      const rows = normalizeList<AlbumImageApiRow>(raw);
+      const album = normalizeAlbum(raw);
+      const rows = normalizeList<AlbumImageApiRow>(album?.images ?? []);
       const next = rows.map(mapRow).filter(Boolean) as AlbumImageRow[];
       setItems(next);
+      setAlbumTitle((album?.title ?? '').toString().trim() || null);
     } finally {
       setLoading(false);
     }
@@ -73,8 +95,20 @@ export default function AlbumImagesSection({ albumId }: { albumId: string }) {
   }, [albumId]);
 
   const onUpload = async () => {
+    setError('');
     if (!file) {
-      window.alert('Please select an image first');
+      setError('Please select an image first');
+      return;
+    }
+
+    const validTypes = ['image/png', 'image/jpeg', 'image/webp'];
+    if (!validTypes.includes(file.type)) {
+      setError('Image must be PNG, JPG, or WEBP');
+      return;
+    }
+
+    if (file.size > 10 * 1024 * 1024) {
+      setError('Image must be 10MB or smaller');
       return;
     }
 
@@ -92,11 +126,14 @@ export default function AlbumImagesSection({ albumId }: { albumId: string }) {
 
       const data = await res.json().catch(() => null);
       if (!res.ok) {
-        window.alert(data?.message ?? 'Failed to upload image');
+        setError(data?.message ?? 'Failed to upload image');
         return;
       }
 
       setFile(null);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
       await load();
     } finally {
       setUploading(false);
@@ -116,14 +153,14 @@ export default function AlbumImagesSection({ albumId }: { albumId: string }) {
         headers: { Accept: 'application/json' },
       });
 
-      if (!res.ok) {
+    if (!res.ok) {
         const data = await res.json().catch(() => null);
         setItems(snapshot);
-        window.alert(data?.message ?? 'Failed to delete image');
+        setError(data?.message ?? 'Failed to delete image');
       }
     } catch {
       setItems(snapshot);
-      window.alert('Network error. Please try again.');
+      setError('Network error. Please try again.');
     }
   };
 
@@ -138,7 +175,7 @@ export default function AlbumImagesSection({ albumId }: { albumId: string }) {
           Back
         </button>
         <h2 className="text-center text-[16px] font-semibold text-[#2B3A4A]">
-          Album Images (#{albumId})
+          Album Images {albumTitle ? `- ${albumTitle}` : `(#${albumId})`}
         </h2>
         <div className="w-[68px]" />
       </div>
@@ -148,6 +185,7 @@ export default function AlbumImagesSection({ albumId }: { albumId: string }) {
           <input
             type="file"
             accept="image/*"
+            ref={fileInputRef}
             onChange={(e) => setFile(e.target.files?.[0] ?? null)}
             className="text-[12px]"
           />
@@ -160,6 +198,9 @@ export default function AlbumImagesSection({ albumId }: { albumId: string }) {
             {uploading ? 'Uploading...' : 'Upload Image'}
           </button>
         </div>
+        {error ? (
+          <p className="mt-2 text-[12px] font-medium text-red-600">{error}</p>
+        ) : null}
       </div>
 
       {loading ? <Loader label="Loading..." /> : null}
