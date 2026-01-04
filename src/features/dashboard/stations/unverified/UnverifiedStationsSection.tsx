@@ -73,7 +73,9 @@ export default function UnverifiedStationsSection() {
    const updateM = useUpdateStation();
 
    const [modalOpen, setModalOpen] = useState(false);
-   const [modalMode, setModalMode] = useState<'create' | 'edit' | 'view'>('create');
+   const [modalMode, setModalMode] = useState<'create' | 'edit' | 'view'>(
+      'create'
+   );
    const [activeId, setActiveId] = useState<string | null>(null);
    const [formError, setFormError] = useState('');
 
@@ -349,16 +351,25 @@ export default function UnverifiedStationsSection() {
             onSubmit={async payload => {
                setFormError('');
 
+               const normalizedPayload = {
+                  ...payload,
+                  station_owner_id: payload.station_owner_id ?? undefined,
+               };
+
                try {
                   if (modalMode === 'create') {
-                     await createM.mutateAsync(payload as any);
+                     await createM.mutateAsync(normalizedPayload as any);
                   } else {
                      if (!activeId) {
                         setFormError('Invalid station id');
                         return;
                      }
-                     await updateM.mutateAsync({id: activeId, payload});
+                     await updateM.mutateAsync({
+                        id: activeId,
+                        payload: normalizedPayload as any,
+                     });
                   }
+
                   setModalOpen(false);
                   setActiveId(null);
                } catch (e: any) {
