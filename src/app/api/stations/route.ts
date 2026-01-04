@@ -7,12 +7,6 @@ async function readBody(req: Request) {
   return await req.json().catch(() => null);
 }
 
-async function readBody(req: Request) {
-  const ct = req.headers.get('content-type') ?? '';
-  if (ct.includes('multipart/form-data')) return await req.formData();
-  return await req.json().catch(() => null);
-}
-
 export async function GET(req: Request) {
   try {
     const url = new URL(req.url);
