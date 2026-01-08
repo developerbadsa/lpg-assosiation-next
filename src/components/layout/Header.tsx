@@ -45,12 +45,14 @@ const MAIN_NAV: NavItem[] = [
    // },
    {
       key: 'stations',
-      label: 'MEMBER STATIONS',
+      label: 'MEMBERSHIP STATION',
       href: '#',
       children: [
          {label: 'Member List', href: '/members/all-members'},
+         {label: 'Non-Member List', href: '/members/non-members'},
          {label: 'Running LPG Stations', href: '/members/running-stations'},
          {label: 'On Going LPG Stations', href: '/members/on-going-stations'},
+         {label: 'Total Station List', href: '/members/total-stations'},
          {label: 'Membership Fees', href: '/members/membership-fees'},
       ],
    },

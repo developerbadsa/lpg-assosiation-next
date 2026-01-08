@@ -19,7 +19,7 @@ export default function Home() {
             title={
                <>
                   Bangladesh petroleum dealer&apos;s Distributor&apos;s
-                  Agent&apos;s & <br/> Petrol Pump Owner&apos;s Association
+                  Agent&apos;s & <br /> Petrol Pump Owner&apos;s Association
                </>
             }
             subtitle='LICENSE NO: 21/2021 II REG. NO: To-1026/2021'
@@ -27,21 +27,18 @@ export default function Home() {
             ctaHref='/login'
             height='full'
          />
-        <SponsorsSection />
+         <SponsorsSection />
 
-
-          <OurPartnersSection />
+         <OurPartnersSection />
          <AboutUsSection />
          <WhyChooseUsSection />
          <JoinWithUsSection />
 
-
          <ServicesSection />
          <CentralCommitteeSection />
 
-
          <ContactUsSection />
-         <Footer /> 
+         <Footer />
       </div>
    );
 }
