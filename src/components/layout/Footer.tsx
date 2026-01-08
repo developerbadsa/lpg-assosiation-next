@@ -71,16 +71,13 @@ export default function Footer() {
 
                   <div className='mt-4 space-y-1 text-[12px] text-white/75'>
                      <div>
-                        <span className='font-semibold'>Address:</span> 2/2
-                        Pallabi, Dhaka, Bangladesh
+                        <span className='font-semibold'>Address:</span> 2/2 Pallabi, Dhaka, Bangladesh
                      </div>
                      <div>
-                        <span className='font-semibold'>Phone:</span> +880
-                        1XXX-XXXXXX
+                        <span className='font-semibold'>Phone:</span> +8801730178288
                      </div>
                      <div>
-                        <span className='font-semibold'>Email:</span>{' '}
-                        info@lpgautogasbd.com
+                        <span className='font-semibold'>Email:</span>info@lpgautogasbd.com
                      </div>
                   </div>
                </div>
