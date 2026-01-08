@@ -99,7 +99,7 @@ export default function MembershipPopup() {
             </div>
           </div>
 
-          <div className='hidden h-[140px] w-[180px] rounded-[16px] border border-dashed border-[#C9D3EE] bg-[#F7F9FD] lg:flex' />
+          {/* <div className='hidden h-[140px] w-[180px] rounded-[16px] border border-dashed border-[#C9D3EE] bg-[#F7F9FD] lg:flex' /> */}
         </div>
       </div>
     </div>,
