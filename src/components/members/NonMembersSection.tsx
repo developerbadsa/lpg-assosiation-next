@@ -12,7 +12,7 @@ type ApiStationLocation = {
   upazila?: string | null;
 };
 
-type ApiGasStation = {
+type ApiNonMemberStation = {
   id: number;
   station_name: string;
   station_owner_id?: number;
@@ -20,63 +20,66 @@ type ApiGasStation = {
   location?: ApiStationLocation | null;
 };
 
-type ApiGasStationResponse = {
+type ApiNonMemberResponse = {
   current_page?: number;
   from?: number | null;
-  data?: ApiGasStation[];
+  data?: ApiNonMemberStation[];
 };
 
-type OnGoingStationRow = {
+type NonMemberRow = {
   sl: number;
   stationName: string;
+  ownerId: string;
   status: string;
   zone: string;
   district: string;
   upazila: string;
 };
 
-const fetchPendingStations = async () => {
-  const res = await fetch('/api/public/gas-stations/pending');
+const fetchNonMembers = async () => {
+  const res = await fetch('/api/public/station-owners/list');
   const data = await res.json();
   if (!res.ok) {
-    throw new Error(data?.message ?? 'Failed to load on-going stations');
+    throw new Error(data?.message ?? 'Failed to load non-member stations');
   }
-  return data as ApiGasStationResponse;
+  return data as ApiNonMemberResponse;
 };
 
 function StatusBadge({status}: {status: string}) {
   const normalized = status.toUpperCase();
-  const isPending = normalized === 'PENDING';
+  const isPending = normalized === 'PENDING' || normalized === 'UNVERIFIED';
   return (
     <span
       className={`inline-flex items-center justify-center rounded-full px-2 text-[9px] font-semibold ${
         isPending ? 'bg-[#FFF3D1] text-[#8B5D00]' : 'bg-[#EAF7EA] text-[#2D8A2D]'
       }`}>
-      {normalized}
+      {normalized || 'UNKNOWN'}
     </span>
   );
 }
 
-export default function OnGoingStationsSection() {
-  const stationsQ = useQuery({
-    queryKey: ['public', 'gas-stations', 'pending'],
-    queryFn: fetchPendingStations,
+export default function NonMembersSection() {
+  const nonMembersQ = useQuery({
+    queryKey: ['public', 'station-owners', 'list', 'non-members'],
+    queryFn: fetchNonMembers,
   });
 
-  const rows = useMemo<OnGoingStationRow[]>(() => {
-    const items = stationsQ.data?.data ?? [];
-    const start = stationsQ.data?.from ?? 1;
-    return items.map((station, index) => ({
+  const rows = useMemo<NonMemberRow[]>(() => {
+    const items = nonMembersQ.data?.data ?? [];
+    const filtered = items.filter((item) => (item.verification_status ?? '').toUpperCase() !== 'APPROVED');
+    const start = nonMembersQ.data?.from ?? 1;
+    return filtered.map((station, index) => ({
       sl: start + index,
       stationName: station.station_name,
-      status: station.verification_status ?? 'PENDING',
+      ownerId: station.station_owner_id ? String(station.station_owner_id) : '-',
+      status: station.verification_status ?? 'UNVERIFIED',
       zone: station.location?.division ?? '',
       district: station.location?.district ?? '',
       upazila: station.location?.upazila ?? '',
     }));
-  }, [stationsQ.data]);
+  }, [nonMembersQ.data]);
 
-  const columns = useMemo<ColumnDef<OnGoingStationRow>[]>(() => [
+  const columns = useMemo<ColumnDef<NonMemberRow>[]>(() => [
     {
       id: 'sl',
       header: '#',
@@ -97,6 +100,16 @@ export default function OnGoingStationsSection() {
       csvValue: (r) => r.stationName,
       minWidth: 320,
       cell: (r) => <span className="text-inherit">{r.stationName}</span>,
+    },
+    {
+      id: 'ownerId',
+      header: 'Owner ID',
+      sortable: true,
+      sortValue: (r) => r.ownerId,
+      csvHeader: 'Owner ID',
+      csvValue: (r) => r.ownerId,
+      minWidth: 140,
+      cell: (r) => <span className="text-inherit">{r.ownerId}</span>,
     },
     {
       id: 'status',
@@ -140,10 +153,10 @@ export default function OnGoingStationsSection() {
     },
   ], []);
 
-  const statusMessage = stationsQ.isLoading
-    ? 'Loading on-going stations...'
-    : stationsQ.isError
-      ? 'Unable to load on-going stations right now.'
+  const statusMessage = nonMembersQ.isLoading
+    ? 'Loading non-member stations...'
+    : nonMembersQ.isError
+      ? 'Unable to load non-member stations right now.'
       : null;
 
   return (
@@ -157,7 +170,7 @@ export default function OnGoingStationsSection() {
       <div className="lpg-container relative z-10">
         <div className="mx-auto max-w-[860px] text-center">
           <h2 className="text-[30px] font-semibold tracking-tight text-[#133374] md:text-[36px]">
-            List of All LPG Autogas On Going Stations
+            List of Non-Member Stations
           </h2>
           <p className="mt-2 text-[11px] leading-relaxed text-[#8A9CB0] md:text-[12px]">
             Lorem ipsum dolor sit amet consectetur. Semper id ipsum adipiscing dictum dictum ullamcorper est arcu.
@@ -173,13 +186,13 @@ export default function OnGoingStationsSection() {
             rows={rows}
             columns={columns}
             getRowKey={(r) => String(r.sl)}
-            exportFileName="on-going-stations.csv"
+            exportFileName="non-member-stations.csv"
             totalLabel={(total) => (
               <div className="text-[14px] font-semibold text-[#2D8A2D]">
                 Total Stations : <span className="text-[#133374]">{total}</span>
               </div>
             )}
-            searchText={(r) => [r.stationName, r.status, r.zone, r.district, r.upazila].join(' ')}
+            searchText={(r) => [r.stationName, r.ownerId, r.status, r.zone, r.district, r.upazila].join(' ')}
           />
         </div>
       </div>
