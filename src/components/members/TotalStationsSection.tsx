@@ -21,12 +21,10 @@ type ApiGasStation = {
 };
 
 type ApiGasStationResponse = {
-  current_page?: number;
-  from?: number | null;
   data?: ApiGasStation[];
 };
 
-type OnGoingStationRow = {
+type TotalStationRow = {
   sl: number;
   stationName: string;
   status: string;
@@ -35,48 +33,47 @@ type OnGoingStationRow = {
   upazila: string;
 };
 
-const fetchPendingStations = async () => {
-  const res = await fetch('/api/public/gas-stations/pending');
+const fetchTotalStations = async () => {
+  const res = await fetch('/api/public/gas-stations/total');
   const data = await res.json();
   if (!res.ok) {
-    throw new Error(data?.message ?? 'Failed to load on-going stations');
+    throw new Error(data?.message ?? 'Failed to load total stations');
   }
   return data as ApiGasStationResponse;
 };
 
 function StatusBadge({status}: {status: string}) {
   const normalized = status.toUpperCase();
-  const isPending = normalized === 'PENDING';
+  const isApproved = normalized === 'APPROVED';
   return (
     <span
       className={`inline-flex items-center justify-center rounded-full px-2 text-[9px] font-semibold ${
-        isPending ? 'bg-[#FFF3D1] text-[#8B5D00]' : 'bg-[#EAF7EA] text-[#2D8A2D]'
+        isApproved ? 'bg-[#EAF7EA] text-[#2D8A2D]' : 'bg-[#FFF3D1] text-[#8B5D00]'
       }`}>
-      {normalized}
+      {normalized || 'UNKNOWN'}
     </span>
   );
 }
 
-export default function OnGoingStationsSection() {
-  const stationsQ = useQuery({
-    queryKey: ['public', 'gas-stations', 'pending'],
-    queryFn: fetchPendingStations,
+export default function TotalStationsSection() {
+  const totalQ = useQuery({
+    queryKey: ['public', 'gas-stations', 'total'],
+    queryFn: fetchTotalStations,
   });
 
-  const rows = useMemo<OnGoingStationRow[]>(() => {
-    const items = stationsQ.data?.data ?? [];
-    const start = stationsQ.data?.from ?? 1;
+  const rows = useMemo<TotalStationRow[]>(() => {
+    const items = totalQ.data?.data ?? [];
     return items.map((station, index) => ({
-      sl: start + index,
+      sl: index + 1,
       stationName: station.station_name,
-      status: station.verification_status ?? 'PENDING',
+      status: station.verification_status ?? 'UNKNOWN',
       zone: station.location?.division ?? '',
       district: station.location?.district ?? '',
       upazila: station.location?.upazila ?? '',
     }));
-  }, [stationsQ.data]);
+  }, [totalQ.data]);
 
-  const columns = useMemo<ColumnDef<OnGoingStationRow>[]>(() => [
+  const columns = useMemo<ColumnDef<TotalStationRow>[]>(() => [
     {
       id: 'sl',
       header: '#',
@@ -140,10 +137,10 @@ export default function OnGoingStationsSection() {
     },
   ], []);
 
-  const statusMessage = stationsQ.isLoading
-    ? 'Loading on-going stations...'
-    : stationsQ.isError
-      ? 'Unable to load on-going stations right now.'
+  const statusMessage = totalQ.isLoading
+    ? 'Loading total stations...'
+    : totalQ.isError
+      ? 'Unable to load total stations right now.'
       : null;
 
   return (
@@ -157,7 +154,7 @@ export default function OnGoingStationsSection() {
       <div className="lpg-container relative z-10">
         <div className="mx-auto max-w-[860px] text-center">
           <h2 className="text-[30px] font-semibold tracking-tight text-[#133374] md:text-[36px]">
-            List of All LPG Autogas On Going Stations
+            Total LPG Station List
           </h2>
           <p className="mt-2 text-[11px] leading-relaxed text-[#8A9CB0] md:text-[12px]">
             Lorem ipsum dolor sit amet consectetur. Semper id ipsum adipiscing dictum dictum ullamcorper est arcu.
@@ -173,7 +170,7 @@ export default function OnGoingStationsSection() {
             rows={rows}
             columns={columns}
             getRowKey={(r) => String(r.sl)}
-            exportFileName="on-going-stations.csv"
+            exportFileName="total-stations.csv"
             totalLabel={(total) => (
               <div className="text-[14px] font-semibold text-[#2D8A2D]">
                 Total Stations : <span className="text-[#133374]">{total}</span>
