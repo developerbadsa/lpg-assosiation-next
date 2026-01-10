@@ -75,11 +75,18 @@ export default function VerifiedOwnersTable() {
             img.src = src;
          });
 
+      const resolvePhotoUrl = (url?: string) => {
+         if (!url) return undefined;
+         if (url.startsWith('data:image/svg')) return undefined;
+         if (/^https?:\/\//i.test(url)) {
+            return `/api/image-proxy?url=${encodeURIComponent(url)}`;
+         }
+         return url;
+      };
+
       const [card, photo] = await Promise.all([
          loadImage('/id-card/ID.jpg'),
-         row.photoUrl?.startsWith('data:image/svg')
-            ? Promise.resolve(null)
-            : loadImage(row.photoUrl),
+         loadImage(resolvePhotoUrl(row.photoUrl)),
       ]);
 
       const width = card?.width ?? 900;
@@ -135,11 +142,26 @@ export default function VerifiedOwnersTable() {
          ctx.fillText(text, x, y);
       };
 
+      const drawCoverImage = (
+         image: HTMLImageElement,
+         x: number,
+         y: number,
+         w: number,
+         h: number
+      ) => {
+         const scale = Math.max(w / image.width, h / image.height);
+         const sw = w / scale;
+         const sh = h / scale;
+         const sx = (image.width - sw) / 2;
+         const sy = (image.height - sh) / 2;
+         ctx.drawImage(image, sx, sy, sw, sh, x, y, w, h);
+      };
+
       const photoFrame = {
-         x: width * 0.075,
-         y: frontHeight * 0.34,
-         w: width * 0.22,
-         h: frontHeight * 0.46,
+         x: width * 0.065,
+         y: frontHeight * 0.42,
+         w: width * 0.15,
+         h: frontHeight * 0.34,
       };
 
       ctx.save();
@@ -167,7 +189,7 @@ export default function VerifiedOwnersTable() {
       );
       ctx.clip();
       if (photo) {
-         ctx.drawImage(
+         drawCoverImage(
             photo,
             photoFrame.x + 6,
             photoFrame.y + 6,
@@ -196,8 +218,8 @@ export default function VerifiedOwnersTable() {
       drawFittedText(
          nameText,
          width * 0.34,
-         frontHeight * 0.57,
-         width * 0.5,
+         frontHeight * 0.55,
+         width * 0.52,
          700,
          Math.round(width * 0.03)
       );
@@ -205,9 +227,9 @@ export default function VerifiedOwnersTable() {
       ctx.fillStyle = '#111827';
       drawFittedText(
          memberIdText,
-         width * 0.37,
-         frontHeight * 0.66,
-         width * 0.32,
+         width * 0.415,
+         frontHeight * 0.64,
+         width * 0.28,
          600,
          Math.round(width * 0.026)
       );
