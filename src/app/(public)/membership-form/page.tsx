@@ -23,7 +23,7 @@ export default function MembershipFormPage() {
               পেট্রোল পাম্প ওনার্স এসোসিয়েশন
             </h2>
             <p className='mt-2 text-[13px] text-[#5E6B83]'>
-              অস্থায়ী কার্যালয়: ২/২ পূর্বী (৩য় তলা), রিমকু, ঢাকা-১২০৮
+               2/2 Pallabi, Dhaka, Bangladesh
             </p>
             <div className='mt-4 inline-flex items-center justify-center rounded-full border border-[#BBD5B1] px-4 py-1 text-[15px] font-semibold text-[#5FA55A]'>
               মেম্বারশীপ ফরম
