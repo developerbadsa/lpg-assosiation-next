@@ -155,11 +155,12 @@ const drawOwnerOverlay = (ctx: CanvasRenderingContext2D, owner: OwnerRow) => {
       h: frontHeight * 0.34,
    };
 
+   const qrSize = width * 0.14;
    const qrFrame: Rect = {
-      x: width * 0.79,
-      y: frontHeight * 0.46,
-      w: width * 0.135,
-      h: frontHeight * 0.26,
+      x: width * 0.785,
+      y: frontHeight * 0.45,
+      w: qrSize,
+      h: qrSize,
    };
 
    ctx.fillStyle = '#1F2937';
@@ -193,9 +194,11 @@ export async function downloadOwnerCard(row: OwnerRow) {
    if (!ctx) return;
 
    const ownerId = row.id ?? '';
-   const ownerUrl = ownerId
-      ? `https://admin.petroleumstationbd.com/api/station-owners/${ownerId}`
-      : '';
+   const ownerPath = ownerId ? `/manage-owners/verified/${ownerId}` : '';
+   const ownerUrl =
+      ownerPath && typeof window !== 'undefined'
+         ? `${window.location.origin}${ownerPath}`
+         : '';
    const qrUrl = ownerUrl
       ? `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(
            ownerUrl
