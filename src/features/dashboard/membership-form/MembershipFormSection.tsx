@@ -100,7 +100,6 @@ export default function MembershipFormSection() {
                 <th className="px-6 py-3 font-semibold">Station</th>
                 <th className="px-6 py-3 font-semibold">District</th>
                 <th className="px-6 py-3 font-semibold">Submitted</th>
-                <th className="px-6 py-3 font-semibold">Status</th>
                 <th className="px-6 py-3 font-semibold text-right">Action</th>
               </tr>
             </thead>
@@ -115,15 +114,7 @@ export default function MembershipFormSection() {
                   <td className="px-6 py-4">{row.station}</td>
                   <td className="px-6 py-4">{row.district}</td>
                   <td className="px-6 py-4">{row.submitted}</td>
-                  <td className="px-6 py-4">
-                    <span
-                      className={`inline-flex items-center rounded-full px-3 py-1 text-[10px] font-semibold ${
-                        statusStyles[row.status]
-                      }`}
-                    >
-                      {row.status}
-                    </span>
-                  </td>
+
                   <td className="px-6 py-4 text-right">
                     <button
                       type="button"

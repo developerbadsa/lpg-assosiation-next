@@ -335,12 +335,12 @@ export async function downloadOwnerCard(row: OwnerRow) {
    link.click();
 
    const pdfBlob = createPdfBlobFromCanvas(canvas);
-   if (pdfBlob) {
-      const pdfUrl = URL.createObjectURL(pdfBlob);
-      const pdfLink = document.createElement('a');
-      pdfLink.download = `owner-card-${row.memberId ?? row.id}.pdf`;
-      pdfLink.href = pdfUrl;
-      pdfLink.click();
-      URL.revokeObjectURL(pdfUrl);
-   }
+   // if (pdfBlob) {
+   //    const pdfUrl = URL.createObjectURL(pdfBlob);
+   //    const pdfLink = document.createElement('a');
+   //    pdfLink.download = `owner-card-${row.memberId ?? row.id}.pdf`;
+   //    pdfLink.href = pdfUrl;
+   //    pdfLink.click();
+   //    URL.revokeObjectURL(pdfUrl);
+   // }
 }
