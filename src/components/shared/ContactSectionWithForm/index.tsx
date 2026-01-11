@@ -20,33 +20,11 @@ const CONTACT_ITEMS: ContactItem[] = [
       img: personIcon,
    },
    {
-      id: 'org-name-bn',
-      type: 'person',
-      label: 'প্রতিষ্ঠানের নাম:',
-      value:
-         'বাংলাদেশ পেট্রোলিয়াম ডিলার্স,ডিস্ট্রিবিউটার্স,এজেন্ট এন্ড পেট্রোল পাম্প ওনার্স এসোসিয়েশন',
-      img: personIcon,
-   },
-   {
-      id: 'established',
-      type: 'person',
-      label: 'ESTABLISHED:',
-      value: '2000',
-      img: personIcon,
-   },
-   {
       id: 'address-primary',
       type: 'location',
       label: 'ADDRESS:',
       value:
          'Gulfesha Plaza, Left-10, Suite No-10/O, 69 Outer Circular Rd, MoghBazar Mor, Dhaka 1217',
-      img: locationIcon,
-   },
-   {
-      id: 'address-secondary',
-      type: 'location',
-      label: 'ADDRESS:',
-      value: 'Gulfesha Plaza, 69 Outer Circular Rd, MoghBazar Mor, Dhaka 1217.',
       img: locationIcon,
    },
    {

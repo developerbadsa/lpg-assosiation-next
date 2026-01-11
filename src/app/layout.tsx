@@ -1,6 +1,5 @@
 import type {Metadata} from 'next';
 import {Geist, Geist_Mono} from 'next/font/google';
-import Link from 'next/link';
 import Providers from './providers';
 import './globals.css';
 
@@ -15,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-   title: 'Petroleum Station BD',
+   title: 'Petroleum Station Association',
    description: 'Petroleum Station BD Dashboard',
      icons: {
     icon: '/fav.png',
