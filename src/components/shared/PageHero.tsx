@@ -49,6 +49,7 @@ export default function PageHero({
          />
 
          {showHeader && <Header heroSize={heightClass[height]} />}
+         <div className="h-[90px]"></div>
 
          {/* content */}
          <div className='relative flex min-h-[70%] md:min-h-[500px] flex-col items-center justify-center px-4 pb-6 text-center text-white'>
