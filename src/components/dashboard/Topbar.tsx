@@ -46,8 +46,8 @@ export default function Topbar({onOpenSidebar}: TopbarProps) {
 
                <div className='flex items-center gap-2'>
                   <span className='text-xs font-semibold tracking-wide text-slate-700'>
-                     BANGLADESH LPG AUTOGAS STATION & CONVERSION COMMITTEE
-                     REGISTER
+                     Bangladesh petroleum dealer's Distributor's Agent's &
+                     Petrol Pump Owner's Association
                   </span>
                </div>
             </div>

@@ -15,8 +15,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-   title: 'LPG Association',
-   description: 'LPG Association Website',
+   title: 'Petroleum Station BD',
+   description: 'Petroleum Station BD Dashboard',
      icons: {
     icon: '/fav.png',
     shortcut: '/fav.png',
