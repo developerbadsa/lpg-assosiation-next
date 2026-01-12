@@ -11,32 +11,32 @@ import {
 
 const SERVICES: ServiceItem[] = [
    {
-      id: 'vision',
-      title: 'OUR VISION',
+      id: 'Regulatory Guidance',
+      title: 'Regulatory Guidance',
       Icon: DollarStack,
       description:
-         'Online Energy Operational Development, Productivity & Business Scenario – from LPG cylinder to station and autogas conversion with modern technology and expert guidance.',
+         'We provide updated information, interpretations, and guidance on government rules and regulations related to petroleum trading, licensing, safety standards, and taxation. Buying and selling price is fix by the government.',
    },
    {
-      id: 'chain',
-      title: 'LARGEST LPG OWNERS CHAIN MANAGEMENT',
+      id: 'Largest Petrol Pump Owners Chain Management',
+      title: 'Largest Petrol Pump Owners Chain Management',
       Icon: InterestIcon,
       description:
-         'The largest LPG owners’ chain across Bangladesh, supporting dealers and partners with centralized logistics, training and performance monitoring.',
+         'The largest Petrol pump owners’ chain across Bangladesh, supporting dealers and partners with centralized logistics, training, and performance monitoring.',
    },
    {
-      id: 'autogas',
-      title: 'AUTOGAS BUSINESS',
+      id: 'FILLING STATION MANAGEMENT',
+      title: 'FILLING STATION MANAGEMENT',
       Icon: LpgIcon,
       description:
-         'We innovate in autogas business with a strong supply chain, safe conversion services and continuous monitoring of market demands and regulations.',
+         'Filling stations are audited and managed under strict guidelines to ensure 24/7 service, safety compliance, and up to customer satisfactio',
    },
    {
-      id: 'station',
-      title: 'LPG STATION MANAGEMENT',
+      id: 'Petrol/Diesel/Octane/Kerosene/ Lube Oil BUSINESS ',
+      title: 'Petrol/Diesel/Octane/Kerosene/ Lube Oil BUSINESS ',
       Icon: LpgStation,
       description:
-         'LPG stations are audited and managed under strict guidelines to ensure 24/7 service, safety compliance and customer satisfaction.',
+         'Providing reliable supply, safe distribution, and professional support for petrol pumps, dealers, and agents across Bangladesh, ensuring quality products, regulatory compliance, and sustainable business growth.',
    },
 ];
 
@@ -59,7 +59,7 @@ export default function ServicesSection() {
          <div className='lpg-container relative'>
             <SectionHeading
                title='SERVICES'
-               subtitle='Our main focus is to build Members’ Chain and Channel Support that together ensure safe and efficient nationwide activities in LPG, Autogas and Pipelines with quality 24/7 service.'
+               subtitle='Our main focus is to build Members’ Chain and Channel Support that together ensure safe and efficient nationwide activities in Petrol, Diesel & Octane with quality 24/7 service.'
             />
 
             <div className='mt-10 grid gap-12 md:grid-cols-2'>

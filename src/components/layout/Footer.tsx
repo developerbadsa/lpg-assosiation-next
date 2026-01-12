@@ -9,11 +9,11 @@ import paywithimg from './../../assets/paywith.png';
 const usefulLinks = [
    {label: 'Home', href: '/'},
    {label: 'About Us', href: '/about'},
-   {label: 'Committee', href: '/committee'},
-   {label: 'Member Stations', href: '/stations'},
+   {label: 'Committee', href: '/committee/central-committee'},
+   {label: 'Member Stations', href: '/members/total-stations'},
    {label: 'Downloads', href: '/downloads'},
    {label: 'Notices', href: '/notices'},
-   {label: 'Privacy Policy', href: '/privacy'},
+   // {label: 'Privacy Policy', href: '/privacy'},
 ];
 
 const services = [
@@ -78,7 +78,7 @@ export default function Footer() {
                      </div>
                      <div>
                         <span className='font-semibold'>Email:</span>
-                        info@lpgautogasbd.com
+                        info@petroleumstationbd.com
                      </div>
                   </div>
                </div>

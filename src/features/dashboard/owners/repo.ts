@@ -202,9 +202,9 @@ export const ownersRepo: OwnersRepo = {
   },
 
   async reject(id) {
-    await apiJson(`/api/station-owners/${id}/reject`, {
-      method: 'POST',
-      body: JSON.stringify({ reason: 'Rejected by admin' }),
+    await apiJson(`/api/station-owners/${id}`, {
+      method: 'DELETE',
+      body: JSON.stringify({ reason: 'Deleted by admin' }),
     });
   },
 

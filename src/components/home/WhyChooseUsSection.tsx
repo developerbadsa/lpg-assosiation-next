@@ -366,7 +366,7 @@ export default function WhyChooseUsSection() {
          <div className='lpg-container relative'>
             <SectionHeading
                title='WHY CHOOSE US'
-               subtitle='Lorem ipsum dolor sit amet consectetur. Urna ultrices amet ultrices sagittis leo in. In urna fermentum nunc sapien tortor.'
+               // subtitle='Lorem ipsum dolor sit amet consectetur. Urna ultrices amet ultrices sagittis leo in. In urna fermentum nunc sapien tortor.'
             />
 
             <div className='mt-10 flex flex-col gap-6 lg:min-h-[570px] lg:flex-row lg:gap-6'>

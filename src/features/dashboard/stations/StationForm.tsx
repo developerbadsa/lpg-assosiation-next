@@ -92,11 +92,8 @@ const emptyForm: FormState = {
    explosive_license: null,
 };
 
-const createDefaults: Pick<
-   FormState,
-   'station_status'
-> = {
-   station_status: 'Running',
+const createDefaults: Pick<FormState, 'station_status'> = {
+   station_status: '',
 };
 
 function pick<T>(...vals: Array<T | null | undefined>) {
@@ -650,7 +647,10 @@ export default function StationForm({
          return;
       }
 
-      if (form.commencement_date && !toDateOrUndefined(form.commencement_date)) {
+      if (
+         form.commencement_date &&
+         !toDateOrUndefined(form.commencement_date)
+      ) {
          setValidationError('Commencement date is invalid.');
          return;
       }
@@ -716,8 +716,9 @@ export default function StationForm({
          return;
       }
 
-      const statusDefaults: Partial<Pick<FormState, 'station_status' | 'verification_status'>> =
-         mode === 'create' ? createDefaults : {};
+      const statusDefaults: Partial<
+         Pick<FormState, 'station_status' | 'verification_status'>
+      > = mode === 'create' ? createDefaults : {};
 
       const payload: StationUpsertPayload = {
          station_owner_id:
@@ -758,8 +759,11 @@ export default function StationForm({
          explosive_license: form.explosive_license,
       };
 
+         console.log(payload)
       onSubmit(payload);
    };
+
+
 
    const loadingDetails = mode !== 'create' && stationDetailsQ.isLoading;
    const loadingOptions =
@@ -791,7 +795,8 @@ export default function StationForm({
                               const value = e.target.value;
                               const match = existingStationOptions.find(
                                  option =>
-                                    option.label === value || option.id === value
+                                    option.label === value ||
+                                    option.id === value
                               );
                               setExistingStationId(match ? match.id : value);
                            }}
