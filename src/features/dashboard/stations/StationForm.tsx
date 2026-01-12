@@ -738,9 +738,13 @@ export default function StationForm({
          other_businesses: form.other_businesses
             .map(id => toNumberOrUndefined(id) ?? id)
             .filter(Boolean),
-         verification_status:
-            statusDefaults.verification_status ??
-            (form.verification_status || null),
+         ...(mode === 'create'
+            ? {}
+            : {
+                 verification_status:
+                    statusDefaults.verification_status ??
+                    (form.verification_status || null),
+              }),
          verified_by: toNumberOrUndefined(form.verified_by),
          verified_at: toDateOrUndefined(form.verified_at),
          rejection_reason:
