@@ -8,7 +8,7 @@ export default function ContactPage() {
       <div>
          <PageHero
             title='Contact Us'
-            subtitle='Lorem ipsum dolor sit amet consectetur. Neque aliquam amet commodo sollicitudin'
+            subtitle='We warmly welcome you to our Contact Us page. If you have any questions, inquiries, or need further information about our association, please do not hesitate to contact us. We value your feedback and look forward to assisting you.'
             backgroundImage={heroImg}
             height='compact'
          />

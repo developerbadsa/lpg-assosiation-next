@@ -239,25 +239,24 @@ const CONTENT: Record<
    mission: {
       badge: 'M',
       heading: 'OUR MISSION',
-      body: "Our mission is to play an effective role in the country's energy security and economic development, protect the interests of petrol pump owners, dealers, distributors and agents and ensure consumer-friendly, safe and environmentally friendly fuel supply. We are committed to building a modern, sustainable and transparent fuel distribution system through coordination with the government and all relevant stakeholders.",
+      body: 'Our mission is to bring all the Fuel Stations & Fuel Distributors owners under one unique platform and build strong relationship with each other. The primary goal of the Association is to secure BDT 5000 crores already invested in this sector to secure our investment safely.',
    },
    vision: {
       badge: 'V',
       heading: 'OUR VISION',
-      body: 'To develop a safe, sustainable and modern fuel supply system in Bangladesh—where the collective participation of petrol pump owners, dealers, distributors and agents ensures a balanced combination of consumer-friendly services, energy security and environmental protection.',
+      body: 'Our vision is to make this sector haze-free and friendly investment. We believe that along with BPC and Oil marketing company(s) we will forward this business & will make a mentionable development in all the stage of this Trade. It is very much important in connection with our investment.',
    },
    activities: {
       badge: 'A',
       heading: 'OUR ACTIVITIES',
-  body: [
-    'To increase coordination and cooperation between petrol pump owners, dealers, distributors and agents to ensure the country’s energy security.',
-    'To protect the interests of members and to provide regular communication and advice to the government and regulatory agencies in formulating and amending policies, laws and regulations related to the energy sector.',
-    'To conduct awareness activities to maintain transparency, discipline and standards in the petroleum product supply system.',
-    'To monitor and increase awareness on issues related to price, size and quality to ensure consumer-friendly services.',
-    'To implement safety provisions in petrol pumps and fuel distribution systems and provide training and guidance to prevent fires and accidents.',
-    'To encourage the use of environmentally friendly and alternative fuels and play a supportive role in implementing the government’s energy policy.',
-
-  ],
+      body: [
+         'To increase coordination and cooperation between petrol pump owners, dealers, distributors and agents to ensure the country’s energy security.',
+         'To protect the interests of members and to provide regular communication and advice to the government and regulatory agencies in formulating and amending policies, laws and regulations related to the energy sector.',
+         'To conduct awareness activities to maintain transparency, discipline and standards in the petroleum product supply system.',
+         'To monitor and increase awareness on issues related to price, size and quality to ensure consumer-friendly services.',
+         'To implement safety provisions in petrol pumps and fuel distribution systems and provide training and guidance to prevent fires and accidents.',
+         'To encourage the use of environmentally friendly and alternative fuels and play a supportive role in implementing the government’s energy policy.',
+      ],
    },
 };
 

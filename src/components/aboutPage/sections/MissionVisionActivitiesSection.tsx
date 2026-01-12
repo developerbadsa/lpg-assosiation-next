@@ -30,14 +30,11 @@ const MissionVisionActivitiesSection = () => {
                      </h3>
                   </div>
                   <p className='text-[13px] leading-relaxed text-[#23425A] md:text-[14px]'>
-                     Our mission is to play an effective role in the country's
-                     energy security and economic development, protect the
-                     interests of petrol pump owners, dealers, distributors and
-                     agents and ensure consumer-friendly, safe and
-                     environmentally friendly fuel supply. We are committed to
-                     building a modern, sustainable and transparent fuel
-                     distribution system through coordination with the
-                     government and all relevant stakeholders.
+                     Our mission is to bring all the Fuel Stations & Fuel
+                     Distributors owners under one unique platform and build
+                     strong relationship with each other. The primary goal of
+                     the Association is to secure BDT 5000 crores already
+                     invested in this sector to secure our investment safely.
                   </p>
                </AccentCard>
 
@@ -52,11 +49,12 @@ const MissionVisionActivitiesSection = () => {
                      </h3>
                   </div>
                   <p className='text-[13px] leading-relaxed text-[#23425A] md:text-[14px]'>
-                     To develop a safe, sustainable and modern fuel supply
-                     system in Bangladesh—where the collective participation of
-                     petrol pump owners, dealers, distributors and agents
-                     ensures a balanced combination of consumer-friendly
-                     services, energy security and environmental protection.
+                     Our vision is to make this sector haze-free and friendly
+                     investment. We believe that along with BPC and Oil
+                     marketing company(s) we will forward this business & will
+                     make a mentionable development in all the stage of this
+                     Trade. It is very much important in connection with our
+                     investment.
                   </p>
                </AccentCard>
             </div>

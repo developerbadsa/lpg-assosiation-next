@@ -70,11 +70,11 @@ export default function Footer() {
                   <div className='mt-4 space-y-0 text-[12px] text-white/75'>
                      <div>
                         <span className='font-semibold'>Address:</span> 2/2
-                        Pallabi, Dhaka, Bangladesh
+                        Gulfesha Plaza, Left-10, Suite No-10/O, 69 Outer Circular Rd, MoghBazar Mor, Dhaka 1217
                      </div>
                      <div>
                         <span className='font-semibold'>Phone:</span>{' '}
-                        +8801730178288
+                        +8801730-178288, +8801615-851373, +8801711-534142
                      </div>
                      <div>
                         <span className='font-semibold'>Email:</span>

@@ -42,7 +42,7 @@ const CONTACT_ITEMS: ContactItem[] = [
 ];
 
 const MAP_EMBED_URL =
-  'https://www.google.com/maps?q=23.7489983375624,90.40547490009656&z=18&output=embed';
+  'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d228.1171634984759!2d90.36402001694142!3d23.823057261836247!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3755c1537ad6db0b%3A0xeb18825a81ff97e0!2s2%2C%202%20Pallabi%20Rd%2C%20Dhaka%201216!5e0!3m2!1sen!2sbd!4v1768222304153!5m2!1sen!2sbd';
 
 
 export default function ContactUsWithForm() {

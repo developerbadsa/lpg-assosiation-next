@@ -58,7 +58,7 @@ export default function PageHero({
             </h1>
 
             {subtitle && (
-               <p className='mt-3 text-[11px] md:text-[14px] font-medium tracking-[0.22em] text-white/80'>
+               <p className='mt-3 text-[11px] md:text-[14px] font-medium tracking-[0.0em] text-white/80 lpg-container'>
                   {subtitle}
                </p>
             )}

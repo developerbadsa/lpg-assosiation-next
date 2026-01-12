@@ -113,9 +113,9 @@ export default function MembershipFormPopup({
         <div className="relative px-5 py-10 md:px-14 md:py-12">
           <div className="mx-auto max-w-[860px] text-center">
             <h2 className="text-[#0C3364] text-[18px] font-extrabold leading-[1.35] md:text-[26px]">
-              বাংলাদেশ পেট্রোলিয়াম ডিলার্স, ডিস্ট্রিবিউটরস, এজেন্ট এন্ড
-              <br />
-              পেট্রোল পাম্প ওনার্স এসোসিয়েশন
+Welcome to Bangladesh petroleum dealer's Distributor's Agent's &
+Petrol Pump Owner's Association
+
             </h2>
 
             <p className="mt-8 text-[#8BC53F] text-[22px] font-extrabold md:mt-9 md:text-[34px]">

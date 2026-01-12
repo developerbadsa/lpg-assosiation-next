@@ -233,10 +233,10 @@ export default function ContactFormPanel({ mapUrl }: ContactFormPanelProps) {
         />
 
         {/* row 4 – captcha UI only */}
-        <CaptchaRow
+        {/* <CaptchaRow
           value={form.captcha ?? ''}
           onChange={(v) => setForm((p) => ({ ...p, captcha: v }))}
-        />
+        /> */}
 
         {/* status */}
         {status ? (

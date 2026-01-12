@@ -23,8 +23,12 @@ export default function AboutUsSection() {
       const fetchStats = async () => {
          try {
             const [stationsResponse, membersResponse] = await Promise.all([
-               fetch('https://admin.petroleumstationbd.com/api/public/gas-stations/approved'),
-               fetch('https://admin.petroleumstationbd.com/api/public/station-owners/list'),
+               fetch(
+                  'https://admin.petroleumstationbd.com/api/public/gas-stations/approved'
+               ),
+               fetch(
+                  'https://admin.petroleumstationbd.com/api/public/station-owners/list'
+               ),
             ]);
 
             if (stationsResponse.ok) {
@@ -63,7 +67,7 @@ export default function AboutUsSection() {
             value: totalStations,
          },
       ],
-      [totalMembers, totalStations],
+      [totalMembers, totalStations]
    );
 
    return (
@@ -73,14 +77,18 @@ export default function AboutUsSection() {
          <div className='lpg-container relative'>
             {/* main heading */}
             <div className='mb-10 text-center'>
-               <SectionHeading
-                  title=' ABOUT US'
-               />
+               <SectionHeading title=' ABOUT US' />
                <h2 className='text-[22px] font-semibold tracking-[0.22em] text-[#203566]'></h2>
                <p className='mt-2 text-[12px] leading-relaxed text-[#7B8EA5]'>
-Bangladesh Petroleum Dealer's, Distributor's, Agent's & Petrol Pump Owner's Association is a nationally representative organization that serves as a unified platform for entrepreneurs and stakeholders engaged in the petroleum fuel distribution system of Bangladesh. The Association is committed to safeguarding the legitimate rights of its members, ensuring safe and consumer-friendly fuel services, and supporting the implementation of government energy policies.
-
-
+                  Bangladesh Petroleum Dealer's, Distributor's, Agent's & Petrol
+                  Pump Owner's Association is a nationally representative
+                  organization that serves as a unified platform for
+                  entrepreneurs and stakeholders engaged in the petroleum fuel
+                  distribution system of Bangladesh. The Association is
+                  committed to safeguarding the legitimate rights of its
+                  members, ensuring safe and consumer-friendly fuel services,
+                  and supporting the implementation of government energy
+                  policies.
                </p>
             </div>
 
@@ -110,7 +118,7 @@ To develop a safe, sustainable and modern fuel supply system in Bangladesh—whe
                   {/* <div className='pointer-events-none absolute inset-x-6 bottom-0 top-6 rounded-[32px] bg-[radial-gradient(circle_at_center,_#7CDF6A55,_transparent_70%)]' /> */}
                   <div className='relative w-full overflow-hidden rounded-[26px] '>
                      <Image
-                        src={aboutImg} 
+                        src={aboutImg}
                         alt='LPG autogas station illustration'
                         width={720}
                         height={480}
