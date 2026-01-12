@@ -2,6 +2,7 @@ import {
    LayoutDashboard,
    User,
    Receipt,
+   BadgeDollarSign,
    Users,
    Fuel,
    Inbox,
@@ -35,6 +36,12 @@ export const DASH_NAV: NavItem[] = [
    },
    {key: 'profile', label: 'Edit Profile', href: '/edit-profile', icon: User},
    {key: 'invoice', label: 'Invoice', href: '/invoice', icon: Receipt},
+   {
+      key: 'membership-fees',
+      label: 'Pay Membership Fee',
+      href: '/membership-fees',
+      icon: BadgeDollarSign,
+   },
 
    {
       key: 'owners',
