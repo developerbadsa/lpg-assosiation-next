@@ -480,6 +480,20 @@ export default function StationForm({
       []
    );
 
+   const dealershipAgreementOptions = useMemo(
+      () => [
+         {
+            id: 'Bangladesh Petroleum Corporation (BPC)',
+            label: 'Bangladesh Petroleum Corporation (BPC)',
+         },
+         {id: 'Padma Oil Company Ltd.', label: 'Padma Oil Company Ltd.'},
+         {id: 'Jamuna Oil Company Ltd.', label: 'Jamuna Oil Company Ltd.'},
+         {id: 'Meghna Petroleum Ltd', label: 'Meghna Petroleum Ltd'},
+         {id: 'Dealership Agreement', label: 'Dealership Agreement'},
+      ],
+      []
+   );
+
    const otherBusinessFallback = useMemo(
       () => [
          {id: 'Filling Station', name: 'Filling Station'},
@@ -1002,17 +1016,18 @@ export default function StationForm({
                      <label className='mb-1 block text-[11px] font-semibold text-[#173A7A]'>
                         Dealership Agreement
                      </label>
-                     <input
+                     <DatalistInput
                         value={form.dealership_agreement}
-                        onChange={e =>
+                        options={dealershipAgreementOptions}
+                        onValueChange={value =>
                            setForm(prev => ({
                               ...prev,
-                              dealership_agreement: e.target.value,
+                              dealership_agreement: value,
                            }))
                         }
                         disabled={isView}
-                        placeholder='Enter agreement'
-                        className='h-9 w-full rounded-[6px] border border-black/10 px-3 text-[12px] outline-none focus:border-black/20 disabled:bg-black/5'
+                        placeholder='Select agreement'
+                        listId='dealership-agreement-options'
                      />
                   </div>
 
