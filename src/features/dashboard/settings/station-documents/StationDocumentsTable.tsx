@@ -34,20 +34,6 @@ const getDownloadName = (url: string, fallback: string) => {
   return fallback;
 };
 
-const downloadFile = async (url: string, fallbackName: string) => {
-  const filename = getDownloadName(url, fallbackName);
-  const response = await fetch(url, { credentials: 'include' });
-  if (!response.ok) throw new Error('Failed to download document');
-  const blob = await response.blob();
-  const link = document.createElement('a');
-  link.href = URL.createObjectURL(blob);
-  link.download = filename;
-  document.body.appendChild(link);
-  link.click();
-  link.remove();
-  URL.revokeObjectURL(link.href);
-};
-
 export default function StationDocumentsTable() {
   const q = useStationDocuments();
   const del = useDeleteStationDocument();
@@ -103,26 +89,27 @@ export default function StationDocumentsTable() {
         headerClassName: 'w-[140px]',
         csvHeader: 'File',
         csvValue: (r) => r.fileUrl ?? '',
-        cell: (r) =>
-          r.fileUrl ? (
+        cell: (r) => {
+          if (!r.fileUrl) {
+            return <span className="text-[11px] text-[#94A3B8]">No file</span>;
+          }
+
+          const downloadHref = `/api/station-documents/download?url=${encodeURIComponent(
+            r.fileUrl
+          )}`;
+          const downloadName = getDownloadName(r.fileUrl, r.documentType);
+
+          return (
             <a
-              href={r.fileUrl}
-              onClick={async (event) => {
-                event.preventDefault();
-                try {
-                  await downloadFile(r.fileUrl ?? '', r.documentType);
-                } catch (err) {
-                  console.error(err);
-                }
-              }}
+              href={downloadHref}
+              download={downloadName}
               aria-label={`Download ${r.documentType} document`}
               className="text-[12px] font-semibold text-[#133374] hover:underline"
             >
               Download
             </a>
-          ) : (
-            <span className="text-[11px] text-[#94A3B8]">No file</span>
-          ),
+          );
+        },
       },
       {
         id: 'edit',
