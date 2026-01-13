@@ -22,6 +22,18 @@ const btnBase =
 const btnTop =
   'inline-flex h-9 items-center justify-center gap-2 rounded-[6px] px-4 text-[12px] font-medium text-white shadow-sm transition hover:brightness-110 active:brightness-95';
 
+const getDownloadName = (url: string, fallback: string) => {
+  try {
+    const parsed = new URL(url);
+    const name = parsed.pathname.split('/').pop();
+    if (name) return name;
+  } catch {
+    const name = url.split('/').pop();
+    if (name) return name;
+  }
+  return fallback;
+};
+
 export default function StationDocumentsTable() {
   const q = useStationDocuments();
   const del = useDeleteStationDocument();
@@ -77,19 +89,27 @@ export default function StationDocumentsTable() {
         headerClassName: 'w-[140px]',
         csvHeader: 'File',
         csvValue: (r) => r.fileUrl ?? '',
-        cell: (r) =>
-          r.fileUrl ? (
+        cell: (r) => {
+          if (!r.fileUrl) {
+            return <span className="text-[11px] text-[#94A3B8]">No file</span>;
+          }
+
+          const downloadHref = `/api/station-documents/download?url=${encodeURIComponent(
+            r.fileUrl
+          )}`;
+          const downloadName = getDownloadName(r.fileUrl, r.documentType);
+
+          return (
             <a
-              href={r.fileUrl}
-              target="_blank"
-              rel="noreferrer"
+              href={downloadHref}
+              download={downloadName}
+              aria-label={`Download ${r.documentType} document`}
               className="text-[12px] font-semibold text-[#133374] hover:underline"
             >
-              View
+              Download
             </a>
-          ) : (
-            <span className="text-[11px] text-[#94A3B8]">No file</span>
-          ),
+          );
+        },
       },
       {
         id: 'edit',
