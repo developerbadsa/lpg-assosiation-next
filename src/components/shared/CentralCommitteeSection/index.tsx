@@ -6,7 +6,6 @@ import SectionHeading from '@components/ui/SectionHeading';
 import CommitteeMemberCard from './CommitteeMemberCard';
 
 import leaderImg1 from '@assets/leader-img/md-serajul-mawla.png';
-import leaderImg2 from '@assets/leader-img/hasin-parfez.png';
 
 type SocialKind = 'facebook' | 'twitter' | 'linkedin' | 'phone';
 
@@ -32,121 +31,6 @@ export type CommitteeMember = {
    photo: StaticImageData | string;
    socials: {kind: SocialKind; href: string}[];
 };
-
-const fallbackCommitteeMembers: CommitteeMember[] = [
-   {
-      id: 'president-1',
-      role: 'PRESIDENT',
-      name: 'ENGR. MOHAMMAD SERAJUL MAWLA',
-      descriptionLines: [
-         'Managing Director, Saad Motors Ltd.',
-         'Managing Director, SMT Energy Ltd.',
-      ],
-      photo: leaderImg1,
-      socials: [
-         {kind: 'facebook', href: '#'},
-         {kind: 'twitter', href: '#'},
-         {kind: 'linkedin', href: '#'},
-         {kind: 'phone', href: '#'},
-      ],
-   },
-   {
-      id: 'vp-1',
-      role: 'VICE PRESIDENT',
-      name: 'ABDULLAH AL KAFEE',
-      descriptionLines: ['Proprietor, Shefaat Fuel Station'],
-      photo: leaderImg2,
-      socials: [
-         {kind: 'facebook', href: '#'},
-         {kind: 'twitter', href: '#'},
-         {kind: 'linkedin', href: '#'},
-         {kind: 'phone', href: '#'},
-      ],
-   },
-   {
-      id: 'vp-2',
-      role: 'VICE PRESIDENT',
-      name: 'KRISHNA KANTA DAS',
-      descriptionLines: [
-         'Proprietor, K.T. Service Station',
-         '& LPG Conversion Center',
-      ],
-      photo: leaderImg1,
-      socials: [
-         {kind: 'facebook', href: '#'},
-         {kind: 'twitter', href: '#'},
-         {kind: 'linkedin', href: '#'},
-         {kind: 'phone', href: '#'},
-      ],
-   },
-   {
-      id: 'vp-3',
-      role: 'VICE PRESIDENT',
-      name: 'T MASHFU BOBBY',
-      descriptionLines: ['Managing Director, Super Gas Ltd.'],
-      photo: leaderImg2,
-      socials: [
-         {kind: 'facebook', href: '#'},
-         {kind: 'twitter', href: '#'},
-         {kind: 'linkedin', href: '#'},
-         {kind: 'phone', href: '#'},
-      ],
-   },
-   {
-      id: 'vp-4',
-      role: 'VICE PRESIDENT',
-      name: 'MD. ABDUS SABUR REA',
-      descriptionLines: ['Proprietor, Sabur Auto Filling Station'],
-      photo: leaderImg1,
-      socials: [
-         {kind: 'facebook', href: '#'},
-         {kind: 'twitter', href: '#'},
-         {kind: 'linkedin', href: '#'},
-         {kind: 'phone', href: '#'},
-      ],
-   },
-   {
-      id: 'vp-5',
-      role: 'VICE PRESIDENT',
-      name: 'MD. EMAMUL HASAN',
-      descriptionLines: ['Proprietor, Samiron LPG Filling Station'],
-      photo: leaderImg2,
-      socials: [
-         {kind: 'facebook', href: '#'},
-         {kind: 'twitter', href: '#'},
-         {kind: 'linkedin', href: '#'},
-         {kind: 'phone', href: '#'},
-      ],
-   },
-   {
-      id: 'vp-6',
-      role: 'VICE PRESIDENT',
-      name: 'SAYEDA AKTER',
-      descriptionLines: [
-         'Proprietor, Green LP Gas Autogas Filling Station & Conversions',
-      ],
-      photo: leaderImg1,
-      socials: [
-         {kind: 'facebook', href: '#'},
-         {kind: 'twitter', href: '#'},
-         {kind: 'linkedin', href: '#'},
-         {kind: 'phone', href: '#'},
-      ],
-   },
-   {
-      id: 'gs-1',
-      role: 'GENERAL SECRETARY',
-      name: 'MD. HASIN PARVEZ',
-      descriptionLines: ['CEO, Green Fuel Technologies Ltd.'],
-      photo: leaderImg2,
-      socials: [
-         {kind: 'facebook', href: '#'},
-         {kind: 'twitter', href: '#'},
-         {kind: 'linkedin', href: '#'},
-         {kind: 'phone', href: '#'},
-      ],
-   },
-];
 
 const LARAVEL_ORIGIN =
    process.env.NEXT_PUBLIC_LARAVEL_ORIGIN ??
@@ -182,10 +66,34 @@ function buildSocials(item: CommitteeApiItem) {
    return socials;
 }
 
-export default function CentralCommitteeSection() {
-   const [members, setMembers] = useState<CommitteeMember[]>(
-      fallbackCommitteeMembers
+function LoadingBar() {
+   return (
+      <div className='mt-10 w-full'>
+         <div className='h-[10px] w-full overflow-hidden rounded-full bg-black/10'>
+            <div className='h-full w-1/3 animate-[committeeBar_1.1s_ease-in-out_infinite] rounded-full bg-[#1FA36B]' />
+         </div>
+
+         <style jsx>{`
+            @keyframes committeeBar {
+               0% {
+                  transform: translateX(-120%);
+               }
+               50% {
+                  transform: translateX(80%);
+               }
+               100% {
+                  transform: translateX(220%);
+               }
+            }
+         `}</style>
+      </div>
    );
+}
+
+export default function CentralCommitteeSection() {
+   const [members, setMembers] = useState<CommitteeMember[]>([]);
+   const [loading, setLoading] = useState(true);
+   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
    useEffect(() => {
       let active = true;
@@ -193,38 +101,59 @@ export default function CentralCommitteeSection() {
 
       const loadMembers = async () => {
          try {
+            setLoading(true);
+            setErrorMsg(null);
+
             const res = await fetch('/api/central-committees', {
                cache: 'no-store',
                signal: controller.signal,
             });
-            if (!res.ok) return;
-            const raw = await res.json().catch(() => null);
+
+            if (!res.ok) {
+               throw new Error(`Request failed (${res.status})`);
+            }
+
+            const raw = await res.json();
             const list = normalizeList(raw)
                .filter(item => item.is_active)
-               .sort(
-                  (a, b) => Number(a.position_order) - Number(b.position_order)
-               )
+               .sort((a, b) => {
+                  const orderA = Number.isFinite(Number(a.position_order))
+                     ? Number(a.position_order)
+                     : Number.POSITIVE_INFINITY;
+                  const orderB = Number.isFinite(Number(b.position_order))
+                     ? Number(b.position_order)
+                     : Number.POSITIVE_INFINITY;
+                  if (orderA !== orderB) return orderA - orderB;
+                  return Number(b.id) - Number(a.id);
+               })
                .map(item => {
                   const photoUrl = toAbsoluteUrl(item.profile_image);
                   return {
                      id: String(item.id),
                      role:
-                        item.position_name?.toUpperCase() ?? 'COMMITTEE MEMBER',
+                        item.position_name?.toUpperCase?.() ??
+                        'COMMITTEE MEMBER',
                      name: item.full_name,
                      descriptionLines: buildDescriptionLines(
                         item.designation,
                         item.company_name
                      ),
-                     photo: photoUrl ?? leaderImg1,
+                     photo: photoUrl ?? leaderImg1, // if API has no image, keep a safe placeholder image (not fallback list)
                      socials: buildSocials(item),
                   } satisfies CommitteeMember;
                });
 
-            if (active && list.length > 0) {
-               setMembers(list);
-            }
+            if (!active) return;
+            setMembers(list);
          } catch (error) {
             if ((error as DOMException).name === 'AbortError') return;
+            if (!active) return;
+            setErrorMsg(
+               (error as Error).message || 'Failed to load committee members'
+            );
+            setMembers([]);
+         } finally {
+            if (active) setLoading(false);
          }
       };
 
@@ -240,9 +169,7 @@ export default function CentralCommitteeSection() {
 
    return (
       <section className='relative bg-[#F4F9F4] py-16'>
-         {/* side background glows */}
          <div className='pointer-events-none absolute -left-24 top-[120px] h-[260px] w-[260px] rounded-[40px] bg-[radial-gradient(circle_at_center,_#D5E6FF66,_transparent_70%)]' />
-         {/* <div className='pointer-events-none absolute right-[-40px] bottom-[80px] h-[260px] w-[260px] rounded-[40px] bg-[radial-gradient(circle_at_center,_#E1F4E880,_transparent_70%)]' /> */}
 
          <div className='lpg-container relative'>
             <SectionHeading
@@ -250,11 +177,23 @@ export default function CentralCommitteeSection() {
                subtitle='The current committee has been formed in a general meeting held on 27 February, 2021. About 200 owners of autogas stations and conversion workshops were present at the meeting chaired by Engr. Mohammad Serajul Mawla. The panel of Engr. Mohammad Serajul Mawla and SMT Energy Ltd. was elected to the present committee. The following panel members are playing important roles in promoting LPG Autogas and LPG Conversion Center across the country as the General Secretary of this association.'
             />
 
-            <div className='mt-10 grid gap-7 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 justify-center'>
-               {renderedMembers.map(member => (
-                  <CommitteeMemberCard key={member.id} member={member} />
-               ))}
-            </div>
+            {loading ? (
+               <LoadingBar />
+            ) : errorMsg ? (
+               <div className='mt-10 rounded-xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-700'>
+                  {errorMsg}
+               </div>
+            ) : renderedMembers.length === 0 ? (
+               <div className='mt-10 rounded-xl border border-black/10 bg-white/60 px-4 py-6 text-sm text-black/70'>
+                  No committee members found.
+               </div>
+            ) : (
+               <div className='mt-10 grid gap-7 justify-center px-4 md:px-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
+                  {renderedMembers.map(member => (
+                     <CommitteeMemberCard key={member.id} member={member} />
+                  ))}
+               </div>
+            )}
          </div>
       </section>
    );

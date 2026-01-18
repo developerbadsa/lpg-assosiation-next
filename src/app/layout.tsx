@@ -1,12 +1,12 @@
 import type {Metadata} from 'next';
 import {Geist, Geist_Mono} from 'next/font/google';
-import Link from 'next/link';
 import Providers from './providers';
 import './globals.css';
 
 import {AuthProvider, type AuthUser} from '@/features/auth/AuthProvider';
 import {laravelFetch, LaravelHttpError} from '@/lib/http/laravelFetch';
 import {getToken, clearToken} from '@/lib/auth/cookies';
+import WhatsAppStickyButton from '@/components/shared/WhatsAppStickyButton';
 
 const geistSans = Geist({variable: '--font-geist-sans', subsets: ['latin']});
 const geistMono = Geist_Mono({
@@ -15,8 +15,13 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-   title: 'LPG Association',
-   description: 'LPG Association Website',
+   title: 'Petroleum Station Association',
+   description: 'Petroleum Station BD Dashboard',
+     icons: {
+    icon: '/fav.png',
+    shortcut: '/fav.png',
+    apple: '/fav.png', 
+     }
 };
 
 export const viewport = {
@@ -52,10 +57,14 @@ export default async function RootLayout({
 
    return (
       <html className='' lang='en'>
+         
          <body
             className={`${geistSans.variable} ${geistMono.variable} antialiased  w-full`}>
             <Providers>
-               <AuthProvider initialUser={user}>{children}</AuthProvider>
+               <AuthProvider initialUser={user}>
+                  {children}
+                  <WhatsAppStickyButton />
+               </AuthProvider>
             </Providers>
          </body>
       </html>

@@ -1,12 +1,13 @@
 'use client';
 
 import { useMemo, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import TablePanel from '@/components/ui/table-panel/TablePanel';
 import type { ColumnDef } from '@/components/ui/table-panel/types';
 import { BadgeCheck, Pencil, Plus, Trash2 } from 'lucide-react';
 import Loader from '@/components/shared/Loader';
 import type { OwnerRow } from './types';
-import { useAddSection, useApproveOwner, useRejectOwner, useUnverifiedOwners, useUpdateOwner } from './queries';
+import { useApproveOwner, useRejectOwner, useUnverifiedOwners, useUpdateOwner } from './queries';
 import EditOwnerModal from './EditOwnerModal';
 
 function cx(...v: Array<string | false | null | undefined>) {
@@ -41,21 +42,31 @@ function ActionDot({
 }
 
 export default function UnverifiedOwnersTable() {
+  const router = useRouter();
   const q = useUnverifiedOwners();
   const approveM = useApproveOwner();
   const rejectM = useRejectOwner();
-  const addSectionM = useAddSection();
   const updateM = useUpdateOwner();
 
   const [editOpen, setEditOpen] = useState(false);
   const [active, setActive] = useState<OwnerRow | null>(null);
-
-  const busy = approveM.isPending || rejectM.isPending || addSectionM.isPending || updateM.isPending;
+  const busy = approveM.isPending || rejectM.isPending || updateM.isPending;
 
   const columns = useMemo<ColumnDef<OwnerRow>[]>(() => {
     const onEdit = (row: OwnerRow) => {
       setActive(row);
       setEditOpen(true);
+    };
+
+    const onAddStation = (row: OwnerRow) => {
+      const params = new URLSearchParams({
+        returnTo: '/manage-owners/unverified',
+        ownerId: row.id,
+        ownerName: row.ownerName ?? '',
+        ownerPhone: row.phone ?? '',
+        ownerAddress: row.address ?? '',
+      });
+      router.push(`/manage-stations/create-station?${params.toString()}`);
     };
 
     return [
@@ -116,32 +127,32 @@ export default function UnverifiedOwnersTable() {
       },
       {
         id: 'addSection',
-        header: 'ADD SECTION',
+        header: 'Add Station',
         sortable: false,
         align: 'center',
-        headerClassName: 'w-[160px]',
-        csvHeader: 'Add Section',
+        headerClassName: '',
+        csvHeader: 'Verify',
         csvValue: () => '',
         cell: (r) => (
           <button
             type="button"
-            onClick={() => addSectionM.mutate(r.id)}
+            onClick={() => onAddStation(r)}
             disabled={busy}
             className="grid h-9 w-9 place-items-center rounded-[6px] bg-[#133374] text-white shadow-sm hover:brightness-110 active:brightness-95 disabled:opacity-60"
-            aria-label="Add section"
-            title="Add section"
+            aria-label="Verify"
+            title="Verify"
           >
             <Plus size={16} />
           </button>
         ),
       },
       {
-        id: 'upazila',
-        header: 'Upazila',
+        id: 'Action',
+        header: 'Action',
         sortable: false,
         align: 'center',
         headerClassName: 'w-[170px]',
-        csvHeader: 'Upazila',
+        csvHeader: 'Options',
         csvValue: () => '',
         cell: (r) => (
           <div className="flex items-center justify-center gap-2">
@@ -160,7 +171,7 @@ export default function UnverifiedOwnersTable() {
         ),
       },
     ];
-  }, [addSectionM, approveM, rejectM, busy]);
+  }, [approveM, rejectM, busy, router]);
 
   if (q.isLoading) return <Loader label="Loading..." />;
   if (q.isError) return <div className="text-sm text-red-600">Failed to load owners.</div>;
@@ -192,15 +203,18 @@ export default function UnverifiedOwnersTable() {
           updateM.mutate({
             id: active.id,
             input: {
+              fullName: input.fullName,
+              phoneNumber: input.phoneNumber,
+              email: input.email,
               address: input.address,
-              status: input.status,
-              rejectionReason: input.rejectionReason,
+              profileImage: input.profileImage,
             },
           });
           setEditOpen(false);
           setActive(null);
         }}
       />
+
     </div>
   );
 }

@@ -30,6 +30,7 @@ export default function PageHero({
    height = 'full',
    showHeader = true,
    overlayFrom = 'down',
+   
 }: PageHeroProps) {
    return (
       <div className={`relative w-full ${heightClass[height]}`}>
@@ -49,21 +50,22 @@ export default function PageHero({
          />
 
          {showHeader && <Header heroSize={heightClass[height]} />}
+         <div className='h-[120px]'></div>
 
          {/* content */}
-         <div className='relative flex min-h-[70%] flex-col items-center justify-center px-4 pb-6 text-center text-white'>
+         <div className='relative flex min-h-[70%] md:min-h-[500px] flex-col items-center justify-center px-4 lpg-container pb-6 text-center text-white'>
             <h1 className='text-[24px] md:text-[38px] lg:text-[48px] font-bold leading-tight tracking-[-0.04em] mt-18 md:mt-0 mb-12'>
                {title}
             </h1>
 
             {subtitle && (
-               <p className='mt-3 text-[11px] md:text-[14px] font-medium tracking-[0.22em] text-white/80'>
+               <p className='mt-3 text-[11px] md:text-[14px] font-medium tracking-[0.0em] text-white/80 lpg-container'>
                   {subtitle}
                </p>
             )}
 
             {ctaLabel && ctaHref && (
-               <div className='mt-6'>
+               <div className='mt-16'>
                   <Link
                      href={ctaHref}
                      className='inline-flex items-center justify-center rounded-full btn-bg px-7 py-2.5 text-[11px] font-semibold uppercase tracking-[0.22em] text-white shadow-[0_8px_24px_rgba(0,166,81,0.55)]'>

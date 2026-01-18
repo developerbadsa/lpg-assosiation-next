@@ -1,5 +1,6 @@
 'use client';
 
+import {useEffect, useMemo, useState} from 'react';
 import Image, {StaticImageData} from 'next/image';
 import aboutImg from './../img/Group 46.png';
 import SectionHeading from '@components/ui/SectionHeading';
@@ -14,20 +15,61 @@ type VisionStat = {
    value: string;
 };
 
-const visionStats: VisionStat[] = [
-   {
-      icon: iconImg1,
-      label: 'TOTAL MEMBERS',
-      value: '483',
-   },
-   {
-      icon: iconImg2,
-      label: 'LPG STATIONS',
-      value: '928',
-   },
-];
-
 export default function AboutUsSection() {
+   const [totalMembers, setTotalMembers] = useState('0');
+   const [totalStations, setTotalStations] = useState('0');
+
+   useEffect(() => {
+      const fetchStats = async () => {
+         try {
+            const [stationsResponse, membersResponse] = await Promise.all([
+               fetch(
+                  'https://admin.petroleumstationbd.com/api/public/gas-stations/approved'
+               ),
+               fetch(
+                  'https://admin.petroleumstationbd.com/api/public/station-owners/list'
+               ),
+            ]);
+
+            if (stationsResponse.ok) {
+               const stationsData = await stationsResponse.json();
+               const total = Number(stationsData?.total);
+               if (Number.isFinite(total)) {
+                  setTotalStations(total.toLocaleString());
+               }
+            }
+
+            if (membersResponse.ok) {
+               const membersData = await membersResponse.json();
+               const total = Number(membersData?.total);
+               if (Number.isFinite(total)) {
+                  setTotalMembers(total.toLocaleString());
+               }
+            }
+         } catch (error) {
+            console.error('Failed to load about section stats', error);
+         }
+      };
+
+      fetchStats();
+   }, []);
+
+   const visionStats: VisionStat[] = useMemo(
+      () => [
+         {
+            icon: iconImg1,
+            label: 'TOTAL MEMBERS',
+            value: totalMembers,
+         },
+         {
+            icon: iconImg2,
+            label: 'Petrol Pump station',
+            value: totalStations,
+         },
+      ],
+      [totalMembers, totalStations]
+   );
+
    return (
       <section className='relative  md:py-16'>
          {/* subtle background geometry */}
@@ -35,15 +77,18 @@ export default function AboutUsSection() {
          <div className='lpg-container relative'>
             {/* main heading */}
             <div className='mb-10 text-center'>
-               <SectionHeading
-                  title=' ABOUT US'
-                  subtitle=' Lorem ipsum dolor sit amet consectetur. Ultrices volutpat
-                  sollicitudin quis at in. In urna fermentum nunc sapien tortor.'
-               />
+               <SectionHeading title=' ABOUT US' />
                <h2 className='text-[22px] font-semibold tracking-[0.22em] text-[#203566]'></h2>
                <p className='mt-2 text-[12px] leading-relaxed text-[#7B8EA5]'>
-                  Lorem ipsum dolor sit amet consectetur. Ultrices volutpat
-                  sollicitudin quis at in. In urna fermentum nunc sapien tortor.
+                  Bangladesh Petroleum Dealer's, Distributor's, Agent's & Petrol
+                  Pump Owner's Association is a nationally representative
+                  organization that serves as a unified platform for
+                  entrepreneurs and stakeholders engaged in the petroleum fuel
+                  distribution system of Bangladesh. The Association is
+                  committed to safeguarding the legitimate rights of its
+                  members, ensuring safe and consumer-friendly fuel services,
+                  and supporting the implementation of government energy
+                  policies.
                </p>
             </div>
 
@@ -51,26 +96,13 @@ export default function AboutUsSection() {
             <div className='grid gap-10 items-start lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)]'>
                {/* left: vision + stats */}
                <div className='max-w-xl'>
-                  <h3 className='text-[14px] font-semibold '>
+                  {/* <h3 className='text-[14px] font-semibold '>
                      OUR VISION
                   </h3>
 
                   <p className='mt-3 text-[12px] leading-relaxed text-[#5F6F85]'>
-                     Lorem ipsum dolor sit amet consectetur. Sed facilisis eu
-                     blandit lorem sed interdum pellentesque. Lectus egestas
-                     nibh elementum venenatis hendrerit nullam velit augue eros
-                     vitae amet vitae. Blandit posuere consequat consectetur
-                     tempus. Pulvinar vulputate in nibh natoque mauris nunc.
-                  </p>
-                  <p className='mt-3 text-[12px] leading-relaxed text-[#5F6F85]'>
-                     Vitae nec montes convallis nibh volutpat. Aliquet sit
-                     interdum massa et id placerat nunc ultricies nunc. Mauris
-                     sed aliquam et ut nec. Id non ultrices magna adipiscing et
-                     id. Duis elementum nulla id risus nullam sed. Id sed diam
-                     sit amet fames sed scelerisque leo euismod. Sit sit
-                     condimentum viverra donec nunc nunc euismod sem id. Nibh
-                     sed ultrices id eget volutpat enim maecenas.
-                  </p>
+To develop a safe, sustainable and modern fuel supply system in Bangladesh—where the collective participation of petrol pump owners, dealers, distributors and agents ensures a balanced combination of consumer-friendly services, energy security and environmental protection
+                  </p> */}
 
                   {/* stats cards */}
                   <div className='mt-7 grid gap-4 place-items-center sm:grid-cols-2 sm:place-items-start'>
@@ -86,7 +118,7 @@ export default function AboutUsSection() {
                   {/* <div className='pointer-events-none absolute inset-x-6 bottom-0 top-6 rounded-[32px] bg-[radial-gradient(circle_at_center,_#7CDF6A55,_transparent_70%)]' /> */}
                   <div className='relative w-full overflow-hidden rounded-[26px] '>
                      <Image
-                        src={aboutImg} 
+                        src={aboutImg}
                         alt='LPG autogas station illustration'
                         width={720}
                         height={480}
@@ -142,7 +174,7 @@ function VisionStatCard({icon, label, value}: VisionStat) {
 
             {/* label + value pinned toward bottom like design */}
             <div className='mt-auto'>
-               <p className='text-[18px] font-semibold uppercase tracking-[0.0em] '>
+               <p className='text-[14px] font-semibold uppercase tracking-[0.0em] '>
                   {label}
                </p>
                <p className='mt-2 text-[50px] font-semibold leading-none '>

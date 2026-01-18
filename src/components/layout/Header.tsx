@@ -7,12 +7,22 @@ import {Logo} from './../ui/Logo';
 import {useAuth} from '@/features/auth/AuthProvider';
 import {Menu, X} from 'lucide-react';
 
-type NavChild = {label: string; href: string};
+type NavChild = {label: string; href: string; action?: () => void};
 type NavItem = {
    key: string;
    label: string;
    href: string;
    children?: NavChild[];
+};
+
+const downloadFile = (url: string, filename?: string) => {
+   const a = document.createElement('a');
+   a.href = url;
+   a.download = filename ?? '';
+   a.rel = 'noopener';
+   document.body.appendChild(a);
+   a.click();
+   a.remove();
 };
 
 const MAIN_NAV: NavItem[] = [
@@ -22,9 +32,9 @@ const MAIN_NAV: NavItem[] = [
       label: 'GALLERY',
       href: '#',
       children: [
-         // { label: 'PHOTO', href: '/gallery/photo' },
-         {label: 'Photo', href: '/gallery/print-media-gallery'},
-         // {label: 'MEDIA COVERAGE', href: '/gallery/media-coverage'},
+         {label: 'PHOTO GALLERY', href: '/gallery/photo-gallery'},
+         {label: 'PRINT MEDIA GALLERY', href: '/gallery/print-media-gallery'},
+         {label: 'MEDIA COVERAGE', href: '/gallery/media-coverage'},
          {label: 'VIDEO GALLERY', href: '/gallery/video-gallery'},
       ],
    },
@@ -45,13 +55,24 @@ const MAIN_NAV: NavItem[] = [
    // },
    {
       key: 'stations',
-      label: 'MEMBER STATIONS',
+      label: 'MEMBERSHIP STATION',
       href: '#',
       children: [
          {label: 'Member List', href: '/members/all-members'},
-         {label: 'Running LPG Stations', href: '/members/running-stations'},
-         {label: 'On Going LPG Stations', href: '/members/on-going-stations'},
+         {label: 'Non-Member List', href: '/members/non-members'},
+         // {label: 'Running LPG Stations', href: '/members/running-stations'},
+         // {label: 'On Going LPG Stations', href: '/members/on-going-stations'},
+         {label: 'Total Station List', href: '/members/total-stations'},
          {label: 'Membership Fees', href: '/members/membership-fees'},
+         {
+            label: 'Download Membership Form',
+            href: '/files/membership-form.pdf',
+            action: () =>
+               downloadFile(
+                  '/files/membership-form.pdf',
+                  'membership-form.pdf'
+               ),
+         },
       ],
    },
    {key: 'contact', label: 'CONTACT', href: '/contact'},
@@ -171,11 +192,12 @@ export default function Header({heroSize = ''}: {heroSize?: string}) {
             />
          )}
 
-         <header className='relative z-20 flex justify-center py-6 pt-[70px] md:py-10 md:pt-[80px] px-2 lg:px-0'>
+         <header className='fixed inset-x-0 top-0 z-50 flex justify-center px-2 py-4 md:py-6 lg:px-0'>
             {/* IMPORTANT: overflow-visible so dropdown isn't clipped */}
             <div className='relative flex h-[70px] w-full items-center justify-between rounded-full bg-white shadow-[0_12px_40px_rgba(0,0,0,0.25)] backdrop-blur lpg-container overflow-visible md:h-[85px]'>
                <Link
                   href='/'
+                  prefetch={false}
                   className='absolute left-0 flex h-full w-[120px] items-center justify-center rounded-l-full bg-[#EEF0FB] md:w-[175px]'>
                   <div className='relative h-[62px] w-[62px] overflow-hidden rounded-full md:h-[82px] md:w-[82px] md:scale-[1.5]'>
                      <Logo />
@@ -200,6 +222,7 @@ export default function Header({heroSize = ''}: {heroSize?: string}) {
                               }>
                               <Link
                                  href={item.href}
+                                 prefetch={false}
                                  aria-haspopup={
                                     hasChildren ? 'menu' : undefined
                                  }
@@ -250,16 +273,31 @@ export default function Header({heroSize = ''}: {heroSize?: string}) {
                                     <div className='dropdown-panel'>
                                        <ul className='dropdown-list'>
                                           {item.children!.map(child => (
-                                             <li key={child.href}>
-                                                <Link
-                                                   href={child.href}
-                                                   className='dropdown-item'
-                                                   role='menuitem'
-                                                   onClick={() =>
-                                                      closeDropdowns()
-                                                   }>
-                                                   {child.label}
-                                                </Link>
+                                             <li
+                                                key={child.href ?? child.label}>
+                                                {child.action ? (
+                                                   <button
+                                                      type='button'
+                                                      className='dropdown-item w-full text-left'
+                                                      role='menuitem'
+                                                      onClick={() => {
+                                                         child.action?.();
+                                                         closeDropdowns();
+                                                      }}>
+                                                      {child.label}
+                                                   </button>
+                                                ) : (
+                                                   <Link
+                                                      href={child.href}
+                                                      prefetch={false}
+                                                      className='dropdown-item'
+                                                      role='menuitem'
+                                                      onClick={() =>
+                                                         closeDropdowns()
+                                                      }>
+                                                      {child.label}
+                                                   </Link>
+                                                )}
                                              </li>
                                           ))}
                                        </ul>
@@ -339,15 +377,30 @@ export default function Header({heroSize = ''}: {heroSize?: string}) {
 
                               {item.children && (
                                  <div className='ml-3 flex flex-col gap-1'>
-                                    {item.children.map(child => (
-                                       <Link
-                                          key={child.href}
-                                          href={child.href}
-                                          onClick={() => setMobileOpen(false)}
-                                          className='text-[10px] font-medium uppercase tracking-[0.14em] text-[#6B7280]'>
-                                          {child.label}
-                                       </Link>
-                                    ))}
+                                    {item.children.map(child =>
+                                       child.action ? (
+                                          <button
+                                             key={child.href ?? child.label}
+                                             type='button'
+                                             onClick={() => {
+                                                setMobileOpen(false);
+                                                child.action?.();
+                                             }}
+                                             className='text-left text-[10px] font-medium uppercase tracking-[0.14em] text-[#6B7280]'>
+                                             {child.label}
+                                          </button>
+                                       ) : (
+                                          <Link
+                                             key={child.href}
+                                             href={child.href}
+                                             onClick={() =>
+                                                setMobileOpen(false)
+                                             }
+                                             className='text-[10px] font-medium uppercase tracking-[0.14em] text-[#6B7280]'>
+                                             {child.label}
+                                          </Link>
+                                       )
+                                    )}
                                  </div>
                               )}
                            </div>

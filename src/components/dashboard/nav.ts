@@ -2,6 +2,7 @@ import {
    LayoutDashboard,
    User,
    Receipt,
+   BadgeDollarSign,
    Users,
    Fuel,
    Inbox,
@@ -35,6 +36,12 @@ export const DASH_NAV: NavItem[] = [
    },
    {key: 'profile', label: 'Edit Profile', href: '/edit-profile', icon: User},
    {key: 'invoice', label: 'Invoice', href: '/invoice', icon: Receipt},
+   {
+      key: 'membership-fees',
+      label: 'Pay Membership Fee',
+      href: '/membership-fees',
+      icon: BadgeDollarSign,
+   },
 
    {
       key: 'owners',
@@ -54,6 +61,7 @@ export const DASH_NAV: NavItem[] = [
       children: [
          {label: 'Unverified Stations', href: '/manage-stations/unverified'},
          {label: 'Verified Stations', href: '/manage-stations/verified'},
+         // {label: 'Create Station', href: '/manage-stations/create-station'},
       ],
    },
 
@@ -61,8 +69,11 @@ export const DASH_NAV: NavItem[] = [
    {
       key: 'committee',
       label: 'Manage Committee',
-      href: '/manage-committee',
       icon: UsersRound,
+      children: [
+         {label: 'Central Committee', href: '/manage-committee'},
+         {label: 'Zonal Committee', href: '/manage-zonal-committee'},
+      ],
    },
 
    {
@@ -76,6 +87,12 @@ export const DASH_NAV: NavItem[] = [
          {label: 'POPUP Ads', href: '/multimedia/popup-ads'},
       ],
    },
+   {
+      key: 'membership-form',
+      label: 'Membership Form',
+      href: '/dashboard/membership-form',
+      icon: User,
+   },
 
    {key: 'notices', label: 'Notices', href: '/dashboard-notices', icon: Bell},
    {
@@ -85,7 +102,7 @@ export const DASH_NAV: NavItem[] = [
       icon: Download,
    },
   //  {label: 'Other Businesses', href: '/settings/other-businesses'},
-  //  {label: 'Station Documents', href: '/settings/station-documents'}, 
+   {key: 'station-documents', label: 'Station Documents', href: '/settings/station-documents', icon: Bell},
    {
       key: 'settings',
       label: 'Setting',

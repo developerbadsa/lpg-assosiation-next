@@ -9,19 +9,18 @@ import paywithimg from './../../assets/paywith.png';
 const usefulLinks = [
    {label: 'Home', href: '/'},
    {label: 'About Us', href: '/about'},
-   {label: 'Committee', href: '/committee'},
-   {label: 'Member Stations', href: '/stations'},
+   {label: 'Committee', href: '/committee/central-committee'},
+   {label: 'Member Stations', href: '/members/total-stations'},
    {label: 'Downloads', href: '/downloads'},
    {label: 'Notices', href: '/notices'},
-   {label: 'Privacy Policy', href: '/privacy'},
+   // {label: 'Privacy Policy', href: '/privacy'},
 ];
 
 const services = [
-   'Owners Chain Management',
-   'LPG Autogas Station Management',
-   'LPG Conversion Workshop',
-   'Training & Certification',
-   'Regulatory Compliance Support',
+   'Regulatory Guidance',
+   'Largest Petrol Pump Owners Chain Management',
+   'Filling Station Management',
+   'Petrol/Diesel/Octane/Kerosene/ Lube Oil Business',
 ];
 
 // const paymentIcons = [
@@ -33,7 +32,7 @@ const services = [
 
 export default function Footer() {
    return (
-      <footer className='mt-20 relative pt-22 pb-12'>
+      <footer className='mt-4 relative pt-8 pb-3'>
          <div className=''>
             <Image
                src={footerbggridwrap}
@@ -48,39 +47,37 @@ export default function Footer() {
             <div className='flex flex-col gap-10 lg:flex-row lg:gap-12'>
                {/* left: logo + org info */}
                <div className='lg:w-[38%]'>
-                  <div className='flex items-start flex-col gap-4'>
+                  <div className='flex items-start flex-col gap-2'>
                      <div className='flex h-16 w-16 items-center justify-center rounded-full bg-white shadow-[0_10px_30px_rgba(0,0,0,0.35)]'>
                         <div className='relative h-14 w-14 overflow-hidden rounded-full'>
                            <Logo />
                         </div>
                      </div>
                      <div className='text-[16px] font-semibold leading-snug tracking-[0.02em] text-white uppercase'>
-                        Bangladesh LPG Autogas
-                        <br />
-                        Station &amp; Conversion Workshop
-                        <br />
-                        Owner&apos;s Association
+                        Bangladesh petroleum dealer's Distributor's Agent's &
+                        Petrol Pump Owner's Association
                      </div>
                   </div>
 
-                  <p className='mt-4 text-[18px] leading-[22px] text-white/60'>
-                     We represent LPG autogas stations and conversion workshops
-                     across Bangladesh, working to ensure safety, compliance and
+                  <p className='mt-3 text-[18px] leading-[17px] text-white/60'>
+                     We represent Bangladesh petroleum dealer's Distributor's
+                     Agent's & Petrol Pump Owner's Association across
+                     Bangladesh, working to ensure safety, compliance and
                      sustainable growth of the sector.
                   </p>
 
-                  <div className='mt-4 space-y-1 text-[12px] text-white/75'>
+                  <div className='mt-4 space-y-0 text-[12px] text-white/75'>
                      <div>
                         <span className='font-semibold'>Address:</span> 2/2
-                        Pallabi, Dhaka, Bangladesh
+                        Gulfesha Plaza, Left-10, Suite No-10/O, 69 Outer Circular Rd, MoghBazar Mor, Dhaka 1217
                      </div>
                      <div>
-                        <span className='font-semibold'>Phone:</span> +880
-                        1XXX-XXXXXX
+                        <span className='font-semibold'>Phone:</span>{' '}
+                        +8801730-178288, +8801615-851373, +8801711-534142
                      </div>
                      <div>
-                        <span className='font-semibold'>Email:</span>{' '}
-                        info@lpgautogasbd.com
+                        <span className='font-semibold'>Email:</span>
+                        info@petroleumstationbd.com
                      </div>
                   </div>
                </div>
@@ -158,7 +155,7 @@ export default function Footer() {
             <div className='mt-8 h-px w-full bg-white/25' />
 
             {/* bottom row: payment icons + copyright */}
-            <div className='mt-5 flex flex-col items-start gap-4'>
+            <div className='mt-5 flex flex-col items-start gap-2'>
                <div className='flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:gap-[30px]'>
                   <span className='flex h-[44px] items-center text-nowrap border-r border-[#dddddd86] pr-6 text-white sm:border-r'>
                      Pay With
@@ -180,8 +177,8 @@ export default function Footer() {
                   </div>
                </div>
                <p className='text-center text-[11px] text-white/75  w-full'>
-                  © {new Date().getFullYear()} Bangladesh LPG Autogas Station
-                  &amp; Conversion Workshop Owner&apos;s Association. All Rights
+                  © {new Date().getFullYear()} Bangladesh petroleum dealer's Distributor's Agent's &
+Petrol Pump Owner's Association. All Rights
                   Reserved.
                </p>
             </div>

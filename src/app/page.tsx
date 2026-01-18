@@ -8,16 +8,18 @@ import WhyChooseUsSection from './../components/home/WhyChooseUsSection';
 import JoinWithUsSection from './../components/home/sections/JoinWithUsSection';
 import ServicesSection from './../components/home/sections/ServicesSection/index';
 import ContactUsSection from './../components/home/sections/ContactUsSection';
+import MembershipPopup from './../components/home/MembershipPopup';
 
 export default function Home() {
    return (
       <div className='w-full'>
+         <MembershipPopup />
          <PageHero
             overlayFrom='top'
             title={
                <>
                   Bangladesh petroleum dealer&apos;s Distributor&apos;s
-                  Agent&apos;s & Petrol Pump Owner&apos;s Association
+                  Agent&apos;s & <br /> Petrol Pump Owner&apos;s Association
                </>
             }
             subtitle='LICENSE NO: 21/2021 II REG. NO: To-1026/2021'
@@ -25,21 +27,18 @@ export default function Home() {
             ctaHref='/login'
             height='full'
          />
-        <SponsorsSection />
+         <SponsorsSection />
 
-
-          <OurPartnersSection />
+         <OurPartnersSection />
          <AboutUsSection />
          <WhyChooseUsSection />
          <JoinWithUsSection />
 
-
          <ServicesSection />
          <CentralCommitteeSection />
 
-
          <ContactUsSection />
-         <Footer /> 
+         <Footer />
       </div>
    );
 }

@@ -17,11 +17,7 @@ import {
 } from 'lucide-react';
 
 import type {StationRow} from './types';
-import {
-   useDeleteStation,
-   useUnverifiedStations,
-   useVerifyStation,
-} from './queries';
+import {useDeleteStation, useUnverifiedStations, useVerifyStation} from './queries';
 import {getStationDetailsRepo} from './repo';
 
 function cx(...v: Array<string | false | null | undefined>) {
@@ -85,7 +81,7 @@ export default function UnverifiedStationsSection() {
          try {
             await prefetchDetails(id);
          } catch {}
-         router.push(`/manage-stations?mode=view&id=${encodeURIComponent(id)}`);
+         router.push(`/manage-stations/unverified/${id}`);
       },
       [prefetchDetails, router]
    );
@@ -95,7 +91,10 @@ export default function UnverifiedStationsSection() {
          try {
             await prefetchDetails(id);
          } catch {}
-         router.push(`/manage-stations?mode=edit&id=${encodeURIComponent(id)}`);
+         const params = new URLSearchParams({
+            returnTo: '/manage-stations/unverified',
+         });
+         router.push(`/manage-stations/edit/${id}?${params.toString()}`);
       },
       [prefetchDetails, router]
    );
@@ -190,7 +189,7 @@ export default function UnverifiedStationsSection() {
                   type='button'
                   onClick={() => {
                      if (verifyM.isPending) return;
-                     const ok = window.confirm('Verify this station?');
+                     const ok = window.confirm('Approve this station?');
                      if (!ok) return;
                      verifyM.mutate(r.id);
                   }}
@@ -279,6 +278,20 @@ export default function UnverifiedStationsSection() {
                   <div className='flex items-center justify-between'>
                      <button
                         type='button'
+                        onClick={() => {
+                           const params = new URLSearchParams({
+                              returnTo: '/manage-stations/unverified',
+                           });
+                           router.push(
+                              `/manage-stations/create-station?${params.toString()}`
+                           );
+                        }}
+                        className='inline-flex h-10 items-center gap-2 rounded-[8px] bg-[#133374] px-8 text-[13px] font-semibold text-white shadow-sm hover:brightness-110 active:brightness-95'>
+                        Add Station
+                     </button>
+
+                     <button
+                        type='button'
                         onClick={() =>
                            exportRowsToCsv(
                               rows,
@@ -308,6 +321,7 @@ export default function UnverifiedStationsSection() {
                }
             />
          )}
+
       </section>
    );
 }

@@ -1,29 +1,81 @@
 'use client';
 
 import {useMemo} from 'react';
+import {useQuery} from '@tanstack/react-query';
 import TablePanel from '@/components/ui/table-panel/TablePanel';
 import type {ColumnDef} from '@/components/ui/table-panel/types';
 import MeshCorners from '@/components/ui/MeshCorners';
 
-import {MOCK_ON_GOING_STATIONS, type OnGoingStationRow} from './mockOnGoingStations';
+type ApiStationLocation = {
+  division?: string | null;
+  district?: string | null;
+  upazila?: string | null;
+};
 
-function ApplyBadge() {
-  return (
-    <span className="inline-flex items-center justify-center rounded-[6px] bg-[#FFB800] px-2 py-[3px] text-[9px] font-semibold text-black shadow-sm">
-      Apply for Membership
-    </span>
-  );
-}
+type ApiGasStation = {
+  id: number;
+  station_name: string;
+  station_owner_id?: number;
+  verification_status?: string;
+  location?: ApiStationLocation | null;
+};
 
-function OwnerBadge({label}: {label: string}) {
+type ApiGasStationResponse = {
+  current_page?: number;
+  from?: number | null;
+  data?: ApiGasStation[];
+};
+
+type OnGoingStationRow = {
+  sl: number;
+  stationName: string;
+  status: string;
+  zone: string;
+  district: string;
+  upazila: string;
+};
+
+const fetchPendingStations = async () => {
+  const res = await fetch('/api/public/gas-stations/pending');
+  const data = await res.json();
+  if (!res.ok) {
+    throw new Error(data?.message ?? 'Failed to load on-going stations');
+  }
+  return data as ApiGasStationResponse;
+};
+
+function StatusBadge({status}: {status: string}) {
+  const normalized = status.toUpperCase();
+  const isPending = normalized === 'PENDING';
   return (
-    <span className="inline-flex h-4 items-center justify-center rounded-full bg-[#EAF7EA] px-2 text-[9px] font-medium text-[#2D8A2D] ring-1 ring-[#2D8A2D]/15">
-      {label}
+    <span
+      className={`inline-flex items-center justify-center rounded-full px-2 text-[9px] font-semibold ${
+        isPending ? 'bg-[#FFF3D1] text-[#8B5D00]' : 'bg-[#EAF7EA] text-[#2D8A2D]'
+      }`}>
+      {normalized}
     </span>
   );
 }
 
 export default function OnGoingStationsSection() {
+  const stationsQ = useQuery({
+    queryKey: ['public', 'gas-stations', 'pending'],
+    queryFn: fetchPendingStations,
+  });
+
+  const rows = useMemo<OnGoingStationRow[]>(() => {
+    const items = stationsQ.data?.data ?? [];
+    const start = stationsQ.data?.from ?? 1;
+    return items.map((station, index) => ({
+      sl: start + index,
+      stationName: station.station_name,
+      status: station.verification_status ?? 'PENDING',
+      zone: station.location?.division ?? '',
+      district: station.location?.district ?? '',
+      upazila: station.location?.upazila ?? '',
+    }));
+  }, [stationsQ.data]);
+
   const columns = useMemo<ColumnDef<OnGoingStationRow>[]>(() => [
     {
       id: 'sl',
@@ -37,29 +89,24 @@ export default function OnGoingStationsSection() {
       cell: (r) => String(r.sl).padStart(2, '0'),
     },
     {
-      id: 'ownerName',
-      header: 'Owner Name',
+      id: 'stationName',
+      header: 'Station Name',
       sortable: true,
-      sortValue: (r) => r.ownerName,
-      csvHeader: 'Owner Name',
-      csvValue: (r) => r.ownerName,
+      sortValue: (r) => r.stationName,
+      csvHeader: 'Station Name',
+      csvValue: (r) => r.stationName,
       minWidth: 320,
-      cell: (r) => (
-        <div className="space-y-1 leading-[1.25]">
-          <div className="text-inherit">{r.ownerName}</div>
-          {r.ownerBadge ? <OwnerBadge label={r.ownerBadge} /> : null}
-        </div>
-      ),
+      cell: (r) => <span className="text-inherit">{r.stationName}</span>,
     },
     {
-      id: 'membershipId',
-      header: 'Membership ID',
+      id: 'status',
+      header: 'Status',
       sortable: true,
-      sortValue: (r) => r.membershipId ?? '',
-      csvHeader: 'Membership ID',
-      csvValue: (r) => r.membershipId ?? '',
-      minWidth: 150,
-      cell: (r) => (r.membershipId ? <span className="text-inherit">{r.membershipId}</span> : <ApplyBadge />),
+      sortValue: (r) => r.status,
+      csvHeader: 'Status',
+      csvValue: (r) => r.status,
+      minWidth: 140,
+      cell: (r) => <StatusBadge status={r.status} />,
     },
     {
       id: 'zone',
@@ -93,6 +140,12 @@ export default function OnGoingStationsSection() {
     },
   ], []);
 
+  const statusMessage = stationsQ.isLoading
+    ? 'Loading on-going stations...'
+    : stationsQ.isError
+      ? 'Unable to load on-going stations right now.'
+      : null;
+
   return (
     <section className="relative overflow-hidden bg-[#F4F9F4] py-14">
       <div className="absolute inset-x-0 top-0 h-[3px] bg-[#6CC12A]" />
@@ -110,15 +163,23 @@ export default function OnGoingStationsSection() {
             Lorem ipsum dolor sit amet consectetur. Semper id ipsum adipiscing dictum dictum ullamcorper est arcu.
             Lobortis in pellentesque mi.
           </p>
+          {statusMessage ? (
+            <p className="mt-3 text-[11px] font-medium text-[#FC7160] md:text-[12px]">{statusMessage}</p>
+          ) : null}
         </div>
 
         <div className="mt-10">
           <TablePanel
-            rows={MOCK_ON_GOING_STATIONS}
+            rows={rows}
             columns={columns}
             getRowKey={(r) => String(r.sl)}
             exportFileName="on-going-stations.csv"
-            searchText={(r) => [r.ownerName, r.membershipId ?? '', r.zone, r.district, r.upazila].join(' ')}
+            totalLabel={(total) => (
+              <div className="text-[14px] font-semibold text-[#2D8A2D]">
+                Total Stations : <span className="text-[#133374]">{total}</span>
+              </div>
+            )}
+            searchText={(r) => [r.stationName, r.status, r.zone, r.district, r.upazila].join(' ')}
           />
         </div>
       </div>

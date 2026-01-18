@@ -1,6 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import TablePanel from '@/components/ui/table-panel/TablePanel';
 import type { ColumnDef } from '@/components/ui/table-panel/types';
 import Loader from '@/components/shared/Loader';
@@ -21,11 +22,26 @@ const btnBase =
 const btnTop =
   'inline-flex h-9 items-center justify-center gap-2 rounded-[6px] px-4 text-[12px] font-medium text-white shadow-sm transition hover:brightness-110 active:brightness-95';
 
+const getDownloadName = (url: string, fallback: string) => {
+  try {
+    const parsed = new URL(url);
+    const name = parsed.pathname.split('/').pop();
+    if (name) return name;
+  } catch {
+    const name = url.split('/').pop();
+    if (name) return name;
+  }
+  return fallback;
+};
+
 export default function StationDocumentsTable() {
   const q = useStationDocuments();
   const del = useDeleteStationDocument();
   const createM = useCreateStationDocument();
   const updateM = useUpdateStationDocument();
+  const searchParams = useSearchParams();
+  const stationIdParam = searchParams.get('stationId');
+  const stationIdFilter = stationIdParam ? Number(stationIdParam) : null;
 
   const [open, setOpen] = useState(false);
   const [mode, setMode] = useState<'create' | 'edit'>('create');
@@ -73,19 +89,27 @@ export default function StationDocumentsTable() {
         headerClassName: 'w-[140px]',
         csvHeader: 'File',
         csvValue: (r) => r.fileUrl ?? '',
-        cell: (r) =>
-          r.fileUrl ? (
+        cell: (r) => {
+          if (!r.fileUrl) {
+            return <span className="text-[11px] text-[#94A3B8]">No file</span>;
+          }
+
+          const downloadHref = `/api/station-documents/download?url=${encodeURIComponent(
+            r.fileUrl
+          )}`;
+          const downloadName = getDownloadName(r.fileUrl, r.documentType);
+
+          return (
             <a
-              href={r.fileUrl}
-              target="_blank"
-              rel="noreferrer"
+              href={downloadHref}
+              download={downloadName}
+              aria-label={`Download ${r.documentType} document`}
               className="text-[12px] font-semibold text-[#133374] hover:underline"
             >
-              View
+              Download
             </a>
-          ) : (
-            <span className="text-[11px] text-[#94A3B8]">No file</span>
-          ),
+          );
+        },
       },
       {
         id: 'edit',
@@ -135,6 +159,12 @@ export default function StationDocumentsTable() {
   if (q.isLoading) return <Loader label="Loading..." />;
   if (q.isError) return <div className="text-sm text-red-600">Failed to load documents.</div>;
 
+  const rows = q.data ?? [];
+  const filteredRows =
+    stationIdFilter && Number.isFinite(stationIdFilter)
+      ? rows.filter((row) => row.stationId === stationIdFilter)
+      : rows;
+
   return (
     <div className="space-y-4">
       <h2 className="text-center text-[16px] font-semibold text-[#2B3A4A]">
@@ -142,7 +172,7 @@ export default function StationDocumentsTable() {
       </h2>
 
       <TablePanel<StationDocumentRow>
-        rows={q.data ?? []}
+        rows={filteredRows}
         columns={columns}
         getRowKey={(r) => r.id}
         searchText={(r) => `${r.sl} ${r.stationId ?? ''} ${r.documentType}`}
