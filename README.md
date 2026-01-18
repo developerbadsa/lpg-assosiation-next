@@ -119,3 +119,7 @@ curl -X POST https://example.com/api/members \
   -F "application_date=2024-12-01" \
   -F "applicant_signature=@/path/to/signature.png"
 ```
+
+## Getting S3 / R2 Credentials
+- **AWS S3**: Create an IAM user with programmatic access, attach a policy granting access to your bucket (e.g., `s3:PutObject`, `s3:GetObject`, `s3:DeleteObject`). Then create an access key and secret, set `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY`, `S3_BUCKET`, and leave `S3_ENDPOINT` empty. `S3_PUBLIC_URL` can be your bucket public URL or CloudFront URL if using a CDN.
+- **Cloudflare R2**: Create an R2 bucket, then create an API token with object read/write permissions. Use the R2 endpoint for `S3_ENDPOINT` (the account-specific endpoint from the R2 dashboard), set `S3_REGION=auto`, `S3_ACCESS_KEY_ID` and `S3_SECRET_ACCESS_KEY` from the token, and `S3_BUCKET` to the bucket name. `S3_PUBLIC_URL` should be your R2 public bucket domain or custom domain if configured.
